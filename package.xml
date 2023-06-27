@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>autoware_ut</name>
+  <version>1.0.0</version>
+  <description>University of Tartu Autonomous Driving Lab Autoware launch files</description>
+  <license>NA</license>
+
+  <maintainer email="adl@ut.ee">Autonomous Driving Lab</maintainer>
+  <author email="edgar.sepp@ut.ee">Edgar Sepp</author>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>autoware_msgs</depend>
+  <depend>libvectormap</depend>
+  <depend>points_downsampler</depend>
+  <depend>rviz</depend>
+  <depend>tf</depend>
+  <depend>topic_tools</depend>
+  <depend>op_ros_helpers</depend>
+  
+  <exec_depend>as</exec_depend>
+  <exec_depend>autoware_camera_lidar_calibrator</exec_depend>
+  <exec_depend>autoware_connector</exec_depend>
+  <exec_depend>calibration_publisher</exec_depend>
+  <exec_depend>decision_maker</exec_depend>
+  <exec_depend>detected_objects_visualizer</exec_depend>
+  <exec_depend>diagnostic_aggregator</exec_depend>
+  <exec_depend>gpsins_localizer</exec_depend>
+  <exec_depend>image_transport</exec_depend>
+  <exec_depend>image_proc</exec_depend>
+  <exec_depend>imm_ukf_pda_track</exec_depend>
+  <exec_depend>joy</exec_depend>
+  <exec_depend>lane_planner</exec_depend>
+  <exec_depend>lidar_euclidean_cluster_detect</exec_depend>
+  <exec_depend>lidar_fake_perception</exec_depend>
+  <exec_depend>lidar_kf_contour_track</exec_depend>
+  <exec_depend>lidar_localizer</exec_depend>
+  <exec_depend>ll2_global_planner</exec_depend>
+  <exec_depend>map_file</exec_depend>
+  <exec_depend>message_filters</exec_depend>
+  <exec_depend>mpc_follower</exec_depend>
+  <exec_depend>op_global_planner</exec_depend>
+  <exec_depend>op_local_planner</exec_depend>
+  <exec_depend>op_simulation_package</exec_depend>
+  <exec_depend>points_preprocessor</exec_depend>
+  <exec_depend>points2image</exec_depend>
+  <exec_depend>pure_pursuit</exec_depend>
+  <exec_depend>python-paho-mqtt</exec_depend>
+  <exec_depend>python-pyaudio</exec_depend>
+  <exec_depend>python-shapely</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rosbag</exec_depend>
+  <exec_depend>rosbridge_server</exec_depend>
+  <exec_depend>roslaunch</exec_depend>
+  <exec_depend>rostest</exec_depend>
+  <exec_depend>rqt_image_view</exec_depend>
+  <exec_depend>stanley_controller</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>trafficlight_recognizer</exec_depend>
+  <exec_depend>twist_filter</exec_depend>
+  <exec_depend>twist_gate</exec_depend>
+  <exec_depend>usb_cam</exec_depend>
+  <exec_depend>vehicle_platform</exec_depend>
+  <exec_depend>vision_darknet_detect</exec_depend>
+  <exec_depend>waypoint_maker</exec_depend>
+  <exec_depend>waypoint_planner</exec_depend>
+  <exec_depend>wf_simulator</exec_depend>
+
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>message_filters</build_export_depend>
+  <build_export_depend>message_runtime</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+
+</package>

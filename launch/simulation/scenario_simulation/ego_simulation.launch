@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="enable_rviz_input" default="true" doc="Enable pose selection for Ego vehicle" />
+    <arg name="enable_scenario_simulation" default="true" />
+    <arg name="scenario_file" default="$(find autoware_ut)/config/scenario_configs/delta_roundabout/scenario_6/default_scenario.json" />
+    <arg name="map_name" default="tartu_yielding" />
+    <arg name="controller" default="mpc" />
+    <arg name="maxVelocity" default="40.0" />
+    <arg name="rviz" default="true" />
+
+    <!-- Lexus model -->
+    <include file="$(find vehicle_platform)/launch/sensors/lexus_model.launch" />
+
+    <!-- Autonomy launch -->
+    <include file="$(find autoware_ut)/launch/autonomy.launch">
+        <arg name="planner" value="openplanner" />
+        <arg name="controller" value="$(arg controller)" />
+        <arg name="localizer" value="gpsins" />
+        <arg name="use_sim_mode" value="true" />
+        <arg name="maxVelocity" value="$(arg maxVelocity)" />
+        <arg name="use_pointcloud_map" value="false" />
+        <arg name="use_waypoints" value="false" />
+        <arg name="use_autoware_vector_map" value="true" />
+        <arg name="use_lanelet2_map" value="false" />
+        <arg name="map_name" value="$(arg map_name)" /> <!-- autoware vector map name -->
+        <arg name="lanelet2_map" value="tartu.osm" /> <!-- has to be located in map_name/lanelet2 -->
+        <arg name="enableRvizInput" value="$(arg enable_rviz_input)" />
+        <arg name="use_lidar_center" value="false" />
+        <arg name="use_lidar_front" value="false" />
+        <arg name="use_radar" value="false" />
+        <arg name="enable_raw_radar" value="false" />
+        <arg name="use_fake_obstacles" value="false" />
+        <arg name="use_obstacle_detection" value="false" />
+        <arg name="use_tl_detection" value="false" /> <!-- traffic light detection -->
+        <arg name="rectify" value="false" />
+        <arg name="use_indicators" value="false" />
+        <arg name="use_webapp" value="false" />
+        <arg name="use_modern_mobility_api" value="false" />
+        <arg name="use_modern_mobility_live" value="false" />
+    </include>
+
+    <!-- Scenario simulator -->
+    <node if="$(arg enable_scenario_simulation)" pkg="autoware_ut" type="obstacle_scenario_simulator.py" name="scenario_simulator" output="screen">
+        <param name="path" value="$(arg scenario_file)" />
+    </node>
+
+    <!-- ==================================== PARAMETERS LAUNCH ============================================ -->
+    <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/detection.yaml" />
+    <!-- =================================================================================================== -->
+
+    <!-- cvkf_tracker -->
+    <group ns="detection">
+        <group ns="lidar">
+            <node pkg="autoware_ut" type="cvkf_tracker.py" name="cvkf_track" output="screen">
+                <remap from="objects" to="/detection/objects" />
+                <remap from="input_simulated_objects" to="/simulated_objects" />
+                <param name="sensor_mode" value="False" />
+                <param name="simulation_mode" value="True" />
+            </node>
+        </group>
+        <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="cvkf_track_viz" output="screen">
+            <rosparam param="label_color">[0, 0, 0, 0.6]</rosparam>
+        </node>
+    </group>
+
+    <group if="$(arg rviz)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find autoware_ut)/rviz/op_sim.rviz" respawn="true" />
+    </group>
+
+</launch>

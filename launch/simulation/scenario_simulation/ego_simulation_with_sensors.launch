@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Maps and planning -->
+    <arg name="use_autoware_vector_map" default="true" />
+    <arg name="use_lanelet2_map" default="false" />
+    <arg name="map_name" default="ts-yielding-0" /> <!-- autoware vector map name -->
+    <arg name="lanelet2_map" default="tartu.osm" /> <!-- has to be located in map_folder/lanelet2 -->
+    <arg name="enableRvizInput" default="true" />
+    <arg name="use_obstacle_filter" default="true" />
+    <!-- ====================================================== -->
+    <arg name="use_lidar_center" default="true" />
+    <arg name="use_lidar_front" default="false" />
+    <arg name="tracker"         default="cvkf"   doc="{imm_ukf, cvkf}" />
+    <arg name="detector" default="pointpillars" doc="{clustering, pointpillars}" />
+    <arg name="use_radar" value="false" />
+    <arg name="enable_raw_radar" value="true" />
+    <arg name="enable_scenario_simulation" default="false" />
+    <arg name="scenario_file" default="$(find autoware_ut)/config/scenario_configs/delta_parking_entry/scenario_6/default_scenario.json" />
+    <arg name="use_sim_time" default="true" />
+    <arg name="run_rviz" default="true" />
+    <arg name="fullscreen" default="false" />
+
+
+    <!-- <include file="$(find autoware_ut)/launch/tools/decompress_image.launch" /> -->
+
+    <!-- sim time true for bag files -->
+    <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+    <!-- Platform -->
+    <include file="$(find autoware_ut)/launch/platform.launch">
+        <arg name="platform" value="sim_mode" />
+        <arg name="planner" value="openplanner" />
+        <arg name="use_diagnostics" value="false" />
+        <arg name="use_engage_button" value="false" />
+        <arg name="use_button_panel" value="false" />
+        <arg name="use_lidar_center" value="$(arg use_lidar_center)" />
+        <arg name="use_lidar_front" value="$(arg use_lidar_front)" />
+        <arg name="use_lidar_front_image" value="false" />
+        <arg name="use_radar" value="$(arg use_radar)" />
+        <arg name="enable_raw_radar" value="$(arg enable_raw_radar)" />
+        <arg name="use_camera_fr" value="false" />
+        <arg name="use_camera_fl" value="false" />
+        <arg name="rectify" value="false" />
+        <arg name="use_lexus_model" value="true" />
+        <arg name="init_params" value="true" />
+    </include>
+
+    <!-- Mission planning -->
+    <include file="$(find autoware_ut)/launch/planning.launch">
+        <arg name="use_sim_mode"            value="true" />
+        <arg name="planner"                 value="openplanner" />
+        <arg name="maxVelocity"             value="40" />
+        <arg name="enableRvizInput"         value="$(arg enableRvizInput)" />
+        <arg name="use_autoware_vector_map" value="$(arg use_autoware_vector_map)" />
+        <arg name="use_lanelet2_map"        value="false" />
+        <arg name="use_waypoints"           value="false" />
+    </include>
+
+    <!-- Load map -->
+    <include file="$(find autoware_ut)/launch/map.launch">
+        <arg name="use_autoware_vector_map" value="$(arg use_autoware_vector_map)" />
+        <arg name="use_lanelet2_map"        value="false" />
+        <arg name="map_name"                value="$(arg map_name)" />
+        <arg name="lanelet2_map"            value="$(arg lanelet2_map)" />
+        <arg name="pointcloud_map"          value="false" />
+        <arg name="waypoints_file"          value="raadi_oscil_gps_30_straight_from_entrance.csv" />
+        <arg name="use_pointcloud_map"      value="false" />
+        <arg name="use_waypoints"           value="false" />
+    </include>
+
+    <!-- Load parameters -->
+    <include file="$(find autoware_ut)/launch/parameters.launch">
+        <arg name="planner"                 value="openplanner" />
+        <arg name="use_sim_mode"            value="true" />
+        <arg name="use_obstacle_detection"  value="true" />
+        <arg name="use_tl_detection"        value="false" />
+    </include>
+
+    <!-- Scenario simulator -->
+    <node if="$(arg enable_scenario_simulation)" pkg="autoware_ut" type="obstacle_scenario_simulator.py" name="scenario_simulator" output="screen">
+        <param name="path" value="$(arg scenario_file)" />
+    </node>
+
+    <!-- Obstacle Detection & Tracking -->
+    <include file="$(find autoware_ut)/launch/detection/obstacle_detection.launch" >
+        <arg name="use_lidar_center"    value="$(arg use_lidar_center)" />
+        <arg name="use_lidar_front"     value="$(arg use_lidar_front)" />
+        <arg name="use_radar"           value="$(arg use_radar)" />
+        <arg name="enable_raw_radar"    value="$(arg enable_raw_radar)" />
+        <arg name="detector"            value="$(arg detector)"/>
+        <arg name="tracker"             value="$(arg tracker)"/>
+    </include>
+
+    <group if="$(arg run_rviz)">
+        <node unless="$(arg fullscreen)" type="rviz" name="rviz" pkg="rviz" args="-d $(find autoware_ut)/rviz/openplanner.rviz" />
+        <node if="$(arg fullscreen)" type="rviz" name="rviz" pkg="rviz" args="--fullscreen -d $(find autoware_ut)/rviz/openplanner.rviz" />
+    </group>
+
+</launch>

@@ -1,0 +1,49 @@
+<launch>
+    <arg name="map_name" default="tartu_yielding" />
+    <arg name="rviz" default="true" />
+
+    <!-- Autonomy launch -->
+    <include file="$(find autoware_ut)/launch/autonomy.launch">
+        <arg name="planner" value="openplanner" />
+        <arg name="localizer" value="gpsins" />
+        <arg name="use_sim_mode" value="true" />
+        <arg name="use_pointcloud_map" value="false" />
+        <arg name="use_waypoints" value="false" />
+        <arg name="use_autoware_vector_map" value="true" />
+        <arg name="use_lanelet2_map" value="false" />
+        <arg name="map_name" value="$(arg map_name)" />
+        <arg name="lanelet2_map" value="tartu.osm" />
+        <arg name="use_lidar_center" value="false" />
+        <arg name="use_lidar_front" value="false" />
+        <arg name="use_radar" value="false" />
+        <arg name="enable_raw_radar" value="false" />
+        <arg name="use_fake_obstacles" value="false" />
+        <arg name="use_obstacle_detection" value="false" />
+        <arg name="use_tl_detection" value="false" />
+        <arg name="rectify" value="false" />
+        <arg name="use_indicators" value="false" />
+        <arg name="use_webapp" value="false" />
+        <arg name="use_modern_mobility_api" value="false" />
+        <arg name="use_modern_mobility_live" value="false" />
+    </include>
+
+    <!-- Waypoint Creator & Saver -->
+    <include file="$(find waypoint_maker)/launch/waypoint_creator.launch" />
+
+    <!-- Waypoints are created on some 3d surface, so we add a marker as plane -->
+    <!-- Feel free to change the marker pose according to your need -->
+    <node name="origin_plane" pkg="rostopic" type="rostopic" args="pub origin_plane visualization_msgs/Marker
+   '{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: 'map'},
+    id: 0,
+    type: 1,
+    action: 0,
+    pose: {position: {x: 9426.97, y: 10021.3, z: 33.0}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}},
+    scale: {x: 1000.0, y: 1000.0, z: 1.0},
+    color: {r: 0.3, g: 0.3, b: 0.3, a: 1.0},
+    lifetime: {secs: 2, nsecs: 0}}' -r 10" />
+
+    <group if="$(arg rviz)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find autoware_ut)/rviz/waypoint_creator.rviz" respawn="true" />
+    </group>
+</launch>
+  

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_sim_mode"            default="true" />
+    <arg name="planner"                 default="openplanner" doc="{openplanner, decisionmaker}"/>
+    <arg name="maxVelocity"             default="40.0" />
+    <arg name="enableRvizInput"         default="false" />
+    <arg name="use_autoware_vector_map" default="false" />
+    <arg name="use_lanelet2_map"        default="false" />
+    <arg name="use_waypoints"           default="false" />
+
+
+    <include if="$(eval arg('planner')=='openplanner')" file="$(find autoware_ut)/launch/planning/openplanner.launch" >
+        <arg name="maxVelocity"     value="$(arg maxVelocity)" />
+        <arg name="enableRvizInput" value="$(arg enableRvizInput)" />
+        <arg name="use_waypoints"   value="$(arg use_waypoints)" />
+    </include>
+
+    <include if="$(eval arg('planner')=='decisionmaker')" file="$(find autoware_ut)/launch/planning/decisionmaker.launch" >
+        <arg name="use_sim_mode"            value="$(arg use_sim_mode)" />
+        <arg name="maxVelocity"             value="$(arg maxVelocity)" />
+        <arg name="use_autoware_vector_map" value="$(arg use_autoware_vector_map)" />
+        <arg name="use_lanelet2_map"        value="$(arg use_lanelet2_map)" />
+        <arg name="use_waypoints"           value="$(arg use_waypoints)" />
+    </include>
+
+</launch>

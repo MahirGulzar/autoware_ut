@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_dbw"               default="true" />
+    <arg name="use_ssc"               default="true" />
+    <arg name="use_tf"                default="true" />
+
+    
+    <!-- TODO: test  if needs ssc_interface - laexus.launch -->
+
+    <include file="$(find vehicle_platform)/launch/platform.launch" >
+        <arg name="use_dbw" value="$(arg use_dbw)" />
+        <arg name="use_ssc" value="$(arg use_ssc)" />
+        <arg name="use_tf"  value="$(arg use_tf)" />
+    </include>
+
+    <include file="$(find ssc_joystick)/launch/ssc_joystick.launch">
+        <arg name="namespace" value="ssc" />
+    </include>
+
+</launch>

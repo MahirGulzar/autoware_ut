@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_modern_mobility_live" default="true" />
+
+    <arg name="complete_distance" default="11" />
+    <arg name="complete_speed"    default="5" />
+    <arg name="map_name"          default="tiksoja" />
+
+    <node pkg="autoware_ut" type="modern_mobility_node.py" name="modern_mobility" output="screen" cwd="node">
+        <!-- Modern_mobility live system -->
+        <param if="$(arg use_modern_mobility_live)" name="vehicleId"   value="1b068c69-10aa-4971-b42f-e2ee06c19801" />
+        <param if="$(arg use_modern_mobility_live)" name="api_key"     value="c468bdc2-ac51-4120-bd2c-7433b7ad9e71" />
+        <param if="$(arg use_modern_mobility_live)" name="areaId"      value="4" />
+        <param if="$(arg use_modern_mobility_live)" name="service_url" value="https://vedas.ee/api/v1/autonomous" />
+        <!-- Modern_mobility dev system -->
+        <param unless="$(arg use_modern_mobility_live)" name="vehicleId"   value="1b068c69-10aa-4971-b42f-e2ee06c19801" />
+        <param unless="$(arg use_modern_mobility_live)" name="api_key"     value="c73fbeb8-52a1-418d-9514-692ea30cbf5a" />
+        <param unless="$(arg use_modern_mobility_live)" name="areaId"      value="9" />
+        <param unless="$(arg use_modern_mobility_live)" name="service_url" value="https://dev.vedas.ee/api/v1/autonomous" />
+        <!-- Common params -->
+        <param name="complete_distance" value="$(arg complete_distance)" />
+        <param name="complete_speed"    value="$(arg complete_speed)" />
+        <param name="stops_file"        value="$(find autoware_ut)/maps/$(arg map_name)/dropoff_points.json" />
+    </node>
+
+</launch>

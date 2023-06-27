@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Required for TF lookups in bag files -->
+    <arg name="planner"         default="openplanner"  doc="{openplanner, decisionmaker}"/>
+    <arg name="use_vector_map"  default="true" />
+
+    <param name="use_sim_time" value="true" />
+
+
+    <!-- Autonomy to test -->
+    <include file="$(find autoware_ut)/launch/autoware/map.launch">
+        <arg name="use_vector_map" value="$(arg use_vector_map)" />
+    </include>
+    <include file="$(find autoware_ut)/launch/autoware/localization.launch" />
+    <include file="$(find autoware_ut)/launch/autoware/planning.launch">
+        <arg name="use_vector_map" value="$(arg use_vector_map)" />
+    </include>
+    <include file="$(find autoware_ut)/launch/autoware/control.launch" />
+    <include file="$(find autoware_ut)/launch/autoware/detection.launch" />
+
+    <!-- Static TFs -->
+    <!-- Velodyne TF -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="lidar_rename" args="0 0 0 0 0 0 lidar velodyne"/>
+
+    <!-- Front-Left Camera Calibration -->
+    <node pkg="calibration_publisher" type="calibration_publisher" name="calibration_publisher" ns="camera_fl" output="screen" />
+
+    <!-- Vehicle TFs -->
+    <include file="$(find vehicle_platform)/launch/platform.launch">
+        <arg name="use_tf" value="true" />
+    </include>
+
+    <!-- System parameters -->
+    <include file="$(find autoware_ut)/launch/parameters.launch" >
+        <arg name="planner" value="$(arg planner)" />
+    </include>
+
+</launch>

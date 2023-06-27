@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_sim_mode"        default="true" />
+    <arg name="planner"             default="openplanner" doc="{openplanner, decisionmaker}"/>
+    <arg name="controller"          default="mpc" doc="{purepursuit, stanley, mpc}" />
+    <arg name="use_indicators"      default="true" />
+
+    <arg name="init_params"         default="false" />
+
+    <arg if="$(eval arg('planner')=='openplanner')"     name="bypass_twist_filter" default="false" />
+    <arg if="$(eval arg('planner')=='openplanner')"     name="use_decision_maker"  default="false" />
+    <arg if="$(eval arg('planner')=='openplanner')"     name="use_lanelet2_map"    default="false" />
+    <arg if="$(eval arg('planner')=='decisionmaker')"   name="bypass_twist_filter" default="false" />
+    <arg if="$(eval arg('planner')=='decisionmaker')"   name="use_decision_maker"  default="true" />
+    <arg if="$(eval arg('planner')=='decisionmaker')"   name="use_lanelet2_map"    default="true" />
+
+
+
+
+    <!-- Waypoint Follower Simulator -->
+    <include if="$(arg use_sim_mode)" file="$(find wf_simulator)/launch/wf_simulator.launch" />
+
+    <!-- Waypoint follower -->
+    <include if="$(eval arg('controller') =='mpc')" file="$(find mpc_follower)/launch/mpc_follower.launch" />
+    <include if="$(eval arg('controller') =='stanley')" file="$(find stanley_controller)/launch/stanley_controller.launch" />
+    <include if="$(eval arg('controller') =='purepursuit')" file="$(find pure_pursuit)/launch/pure_pursuit.launch" />
+
+    <!-- Twist Filter -->
+    <include unless="$(arg bypass_twist_filter)" file="$(find twist_filter)/launch/twist_filter.launch">
+        <arg name="use_decision_maker"  value="$(arg use_decision_maker)" />
+    </include>
+
+    <!-- Twist Filter Bypass -->
+    <group if="$(arg bypass_twist_filter)">
+        <node pkg="twist_gate"  type="twist_gate"   name="twist_gate" />
+        <node pkg="topic_tools" type="relay"        name="twist_bypass" args="twist_raw twist_cmd" />
+        <node pkg="topic_tools" type="relay"        name="ctrl_bypass"  args="ctrl_raw ctrl_cmd" />
+    </group>
+
+    <!-- Indicators / car blinkers -->
+    <node if="$(arg use_indicators)" name="indicator_publisher" pkg="autoware_ut" type="indicator_publisher.py" />
+
+
+    <!-- Load Control / Motion planning parameters -->
+    <group if="$(arg init_params)">
+        <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/control.yaml"/>
+    </group>
+
+</launch>

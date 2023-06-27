@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_lidar_center"    default="true"/>
+    <arg name="use_lidar_front"     default="true"/>
+    <arg name="use_camera_fl"       default="true"/>
+    <arg name="use_camera_fr"       default="true"/>
+    <arg name="use_gnss"            default="true"/>
+
+
+    <node pkg="autoware_ut" type="diagnostics_parser.py" name="diagnostics_parser" />
+
+    <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator" >
+        <rosparam if="$(arg use_gnss)" command="load" file="$(find autoware_ut)/config/diagnostics/gps.yaml" />
+        <rosparam if="$(arg use_lidar_front)" command="load" file="$(find autoware_ut)/config/diagnostics/lidar_front.yaml" />
+        <rosparam if="$(arg use_lidar_center)" command="load" file="$(find autoware_ut)/config/diagnostics/lidar_center.yaml" />
+        <rosparam if="$(eval use_camera_fl and use_camera_fr)" command="load" file="$(find autoware_ut)/config/diagnostics/cameras.yaml" />
+        <rosparam command="load" file="$(find autoware_ut)/config/diagnostics/tfl_detection.yaml" />
+    </node>
+
+    <node pkg="autoware_ut" type="heartbeat_notif.py" name="heartbeat_notif">
+        <param name="use_lidar_center"  value="$(arg use_lidar_center)" />
+        <param name="use_lidar_front"   value="$(arg use_lidar_front)" />
+        <param name="use_cameras"       value="$(eval use_camera_fl and use_camera_fr)" />
+        <param name="use_gnss"           value="$(arg use_gnss)" />
+    </node>
+
+</launch>

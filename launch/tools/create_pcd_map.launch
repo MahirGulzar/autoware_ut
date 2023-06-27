@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+
+    <include file="$(find lidar_localizer)/launch/ndt_mapping.launch">
+        <arg name="method_type" value="0" />
+        <arg name="use_odom"    value="true" />
+    </include>
+
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find autoware_ut)/rviz/ndt_mapping.rviz" />
+
+    <!-- System parameters -->
+    <include file="$(find autoware_ut)/launch/parameters.launch" />
+
+</launch>

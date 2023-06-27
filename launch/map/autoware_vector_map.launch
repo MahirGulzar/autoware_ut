@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="map_name"  default="tartu" />
+
+
+    <!-- Load Vector Map -->
+    <node pkg="map_file" type="vector_map_loader" name="vector_map_loader">
+        <param name="load_mode" value="directory" />
+        <param name="map_dir"   value="$(find autoware_ut)/maps/$(arg map_name)/vector_map" />
+    </node>
+
+    <!-- Create world to map static transform -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 /world /map" />
+
+</launch>

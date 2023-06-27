@@ -1,0 +1,223 @@
+# Common detection params.
+# If a param with the same value is used in more that 2 packages is has to be here.
+
+detection:
+  lidar:
+    points_concat_filter:
+      output_frame_id: lidar_center
+      input_topics: "[/lidar_center/points_no_ground, /lidar_front/points_no_ground]"
+
+    lidar_euclidean_cluster_detect:
+      remove_points_upto: 2.5
+      cluster_merge_threshold: 1.0
+      cluster_size_max: 100000
+      cluster_size_min: 4
+      clip_min_height: -1.5  #-1.65 if using ouster only
+      clustering_distance: 0.6
+      clustering_distances: [ 0.5,1.1,1.6,2.1,2.6 ]
+      clustering_ranges: [ 15,30,45,60 ]
+      downsample_cloud: false
+      keep_lane_left_distance: 1
+      keep_lane_right_distance: 1
+      keep_lanes: false
+      leaf_size: 0.1
+      output_frame: map
+      points_node: points_no_ground
+      pose_estimation: false
+      remove_ground: false
+      use_diffnormals: false
+      use_gpu: true
+      use_multiple_thres: False
+
+    imm_ukf_pda_track:
+      # General Args
+      detection_probability: 0.9
+      gate_probability: 0.99
+      gating_threshold: 9.22
+      life_time_threshold: 8
+      merge_distance_threshold: 0.5
+      prevent_explosion_threshold: 1000
+      static_num_history_threshold: 3
+      static_velocity_threshold: 0.5
+      tracking_frame: map
+      use_sukf: true
+      enable_lane_change: false
+      # Map Args
+      use_vectormap: false
+      lane_direction_chi_threshold: 2.71
+      nearest_lane_distance_threshold: 1.0
+      map_filter_type: 2  # 0 : DISABLE, 1: WAYAREA FILTERING, 2: CENTERLINE_FILTERING
+      filter_radius: 200
+      centerline_filter_distance: 2.0
+
+    cvkf_track:
+      sensor_mode: true                 # To enable tracking of detected objects coming from a sensor
+      simulation_mode: false            # To enable tracking of simulated objects generated from scenario simulator
+      tracking_frame: map               # Frame in which tracking will be applied
+      min_life_threshold: 0             # The min lifetime in seconds lived by a candidate track before its promoted to an actual track
+      min_detection_thresh: 5           # The min number of detections required for a candidate track before its promoted to an actual track
+      max_misdetection_thresh: 0.3      # The max period of misdetections in seconds after which an actual or a candidate track is destroyed
+      gating_treshold: 0.99             # Gating threshold for associating measurements with tracks
+
+    vectormap_filter:     # map filter currently launched for only cvfk tracker
+      map_filter_type: 2  # 0 : DISABLE, 1: WAYAREA FILTERING, 2: CENTERLINE_FILTERING
+      filter_radius: 200
+      centerline_filter_distance: 2.0
+
+  radar:
+    relay:
+      consistency_check: 5 # number of frames a radar detection is received before it is considered a true radar detection. Based on ID count
+
+    imm_ukf_pda_track:
+      # General Args
+      detection_probability: 0.9
+      gate_probability: 0.99
+      gating_threshold: 9.22
+      life_time_threshold: 8
+      merge_distance_threshold: 0.5
+      prevent_explosion_threshold: 1000
+      static_num_history_threshold: 3
+      static_velocity_threshold: 0.5
+      tracking_frame: map
+      use_sukf: true
+      enable_lane_change: false
+      # Map Args
+      use_vectormap: false
+      lane_direction_chi_threshold: 2.71
+      nearest_lane_distance_threshold: 1.0
+      map_filter_type: 2  # 0 : DISABLE, 1: WAYAREA FILTERING, 2: CENTERLINE_FILTERING
+      filter_radius: 200
+      centerline_filter_distance: 2.0
+
+    cvkf_track:
+      sensor_mode: true                 # To enable tracking of detected objects coming from a sensor
+      simulation_mode: false            # To enable tracking of simulated objects generated from scenario simulator
+      tracking_frame: map               # Frame in which tracking will be applied
+      min_life_threshold: 0             # The min lifetime in seconds lived by a candidate track before its promoted to an actual track
+      min_detection_thresh: 5           # The min number of detections required for a candidate track before its promoted to an actual track
+      max_misdetection_thresh: 0.3      # The max period of misdetections in seconds after which an actual or a candidate track is destroyed
+      gating_treshold: 0.99             # Gating threshold for associating measurements with tracks
+
+    vectormap_filter: # map filter currently launched for only cvfk tracker
+      map_filter_type: 2  # 0 : DISABLE, 1: WAYAREA FILTERING, 2: CENTERLINE_FILTERING
+      filter_radius: 200
+      centerline_filter_distance: 2.0
+
+  lidar_radar_fusion:
+    matching_distance: 1.6
+    in_radar_detections_topic: "radar/tracked_objects"
+    in_lidar_detections_topic: "lidar/tracked_objects"
+    out_tracked_objects: "objects"
+    out_marker_array_topic: "objects_markers"
+    radar_speed_threshold: 1.2      # radar objects having speed below this threshold are considered stationary and discarded. Removes hanging tree branches detected by radar
+    radar_speed_margin: 2.78        # if radar speed is less than lidar speed upto this value then a radar object becomes a candidate to be fused with the lidar object. Value in m/s which equals to 10km/h
+    replace_speed_with_norm: true   # boolean dictating if we wish to replace our velocities with norm of velocities
+
+lidar_center:
+  ray_ground_filter:
+    base_frame: base_footprint
+    ground_point_topic: /lidar_center/points_ground
+    input_point_topic: /lidar_center/points_raw
+    no_ground_point_topic: /lidar_center/points_no_ground
+    clipping_height: 1.8
+    min_point_distance: 1.65          # Removes Points closer than this distance from the sensor origin (default 1.85 meters)
+    radial_divider_angle: 0.5         # Angle of each Radial division on the XY Plane (default 0.08 degrees)
+    concentric_divider_distance: 0.0  # Distance of each concentric division on the XY Plane (default 0.0 meters)
+    local_max_slope: 8.0              # Max Slope of the ground between Points (default 8 degrees)
+    general_max_slope: 3.0            # Max Slope of the ground in the entire PointCloud, used when reclassification occurs (default 5 degrees)
+    min_height_threshold: 0.05        # Minimum height threshold between points (default 0.05 meters)
+    reclass_distance_threshold: 0.2   # Distance between points at which re classification will occur (default 0.2 meters)
+
+lidar_front:
+  ray_ground_filter:
+    base_frame: base_footprint
+    ground_point_topic: /lidar_front/points_ground
+    input_point_topic: /lidar_front/points_raw
+    no_ground_point_topic: /lidar_front/points_no_ground
+    clipping_height: 1.8
+    min_point_distance: 1.65          # Removes Points closer than this distance from the sensor origin (default 1.85 meters)
+    radial_divider_angle: 0.5         # Angle of each Radial division on the XY Plane (default 0.08 degrees)
+    concentric_divider_distance: 0.0  # Distance of each concentric division on the XY Plane (default 0.0 meters)
+    local_max_slope: 8.0              # Max Slope of the ground between Points (default 8 degrees)
+    general_max_slope: 3.0            # Max Slope of the ground in the entire PointCloud, used when reclassification occurs (default 5 degrees)
+    min_height_threshold: 0.05        # Minimum height threshold between points (default 0.05 meters)
+    reclass_distance_threshold: 0.2   # Distance between points at which re classification will occur (default 0.2 meters)
+
+op_perception_simulator:
+  GuassianErrorFactor: 0
+  pointCloudPointsNumber: 75
+  simObjNumber: 1
+  useNavGoalToSetStaticObstacle: false
+
+lidar_kf_contour_track:
+  min_object_size: 0.1
+  max_object_size: 30.0
+  tracking_type: 0                  # 0 for association only, 1 for simple kf tracking, 2 for smart contour tracker
+  max_association_distance: 4.5
+  max_association_size_diff: 2.0
+  max_remeber_time: 3
+  trust_counter: 4
+  enableStepByStepMode: false
+  enableLogging: false
+  vector_map_filter_distance: 1.5   # set 0 to disable vector map filtering
+  map_filter_type: 0                # 0 for disable filtering, 1 for boundary (wayarea) filtering, 2 for distance to centerline filtering
+  useDetectionHulls: false
+
+
+# Traffic light detection related parameters
+ib_tls:
+  timeout: 1.5
+
+feature_proj_left:
+  roi_search_max_distance: 90.0
+  roi_search_min_distance: 1.0
+  camera_frame: camera_fl
+  camera_info_src: /camera_fl/camera_info      # feat_proj for lanelet2 map
+  camera_info_topic: /camera_fl/camera_info    # feat_proj for autoware vector map
+  roi_topic_name: /camera_fl/roi_signal
+  use_path_info: false
+
+feature_proj_right:
+  roi_search_max_distance: 45.0
+  roi_search_min_distance: 1.0
+  camera_frame: camera_fr
+  camera_info_src: /camera_fr/camera_info      # feat_proj for lanelet2 map
+  camera_info_topic: /camera_fr/camera_info    # feat_proj for autoware vector map
+  roi_topic_name: /camera_fr/roi_signal
+  use_path_info: false
+
+region_tlr_left:
+  roi_topic: /camera_fl/roi_signal
+  use_converted_map: true
+  change_state_threshold: 2
+  score_threshold: 0.6
+  use_peoria_hacks: false
+  camera_id: camera_fl/
+
+region_tlr_right:
+  roi_topic: /camera_fr/roi_signal
+  use_converted_map: true
+  change_state_threshold: 2
+  score_threshold: 0.6
+  use_peoria_hacks: false
+  camera_id: camera_fr/
+
+color_tlr_left:
+  roi_topic_name: /camera_fl/roi_signal
+  camera_light_color_topic: /camera_fl/light_color
+  superimpose_topic_name: /camera_fl/tlr_superimpose_image
+
+color_tlr_right:
+  roi_topic_name: /camera_fr/roi_signal
+  camera_light_color_topic: /camera_fr/light_color
+  superimpose_topic_name: /camera_fr/tlr_superimpose_image
+
+tlr_yolo_left:
+  roi_signal: /camera_fl/roi_signal
+  roi_topic_name: /camera_fl/roi_yolo_signal
+  image_topic_name: /camera_fl/tlr_superimpose_yolo
+
+tlr_yolo_right:
+  roi_signal: /camera_fr/roi_signal
+  roi_topic_name: /camera_fr/roi_yolo_signal
+  image_topic_name: /camera_fr/tlr_superimpose_yolo

@@ -1,0 +1,88 @@
+twist_filter:
+  lateral_accel_limit: 4.0
+  lateral_jerk_limit: 7.0
+
+pure_pursuit:
+  publishes_for_steering_robot: true
+  lookahead_ratio: 2.5
+  minimum_lookahead_distance: 5.5
+
+mpc_follower:
+  # overall settings and path preparation
+  ctrl_period: 0.03
+  traj_resample_dist: 0.1
+  enable_path_smoothing: True
+  enable_yaw_recalculation: False
+  path_filter_moving_ave_num: 10
+  path_smoothing_times: 1
+  curvature_smoothing_num: 23
+  steering_lpf_cutoff_hz: 3.0
+  admisible_position_error: 5.0
+  admisible_yaw_error_deg: 90.0
+  # MPC algorithm related
+  qp_solver_type: unconstraint_fast
+  qpoases_max_iter: 500
+  vehicle_model_type: kinematics
+  mpc_prediction_horizon: 70
+  mpc_prediction_sampling_time: 0.1
+  # Reduce lateral tracking error. This acts like P gain in PID.
+  mpc_weight_lat_error: 0.25
+  # Make a drive straight. This acts like D gain in PID
+  mpc_weight_heading_error: 0.0
+  # Make a drive straight in high speed range.
+  mpc_weight_heading_error_squared_vel_coeff: 0.3
+  # Reduce oscillation of tracking.
+  mpc_weight_steering_input: 1.0
+  # Reduce oscillation of tracking in high speed range.
+  mpc_weight_steering_input_squared_vel_coeff: 0.7
+  # Reduce lateral jerk
+  mpc_weight_lat_jerk: 0.0
+  # Preferable to set a higher value than normal lateral weight weight_lat_error for stability.
+  mpc_weight_terminal_lat_error: 1.0
+  # Preferable to set a higher value than normal heading weight weight_heading_error for stability.
+  mpc_weight_terminal_heading_error: 0.1
+  mpc_zero_ff_steer_deg: 2.0
+  delay_compensation_time: 0.0
+  # ROS related params
+  out_twist_name: /twist_raw
+  out_vehicle_cmd_name: /ctrl_raw
+  in_selfpose_name: /current_pose
+  in_vehicle_status_name: /vehicle_status
+  in_waypoints_name: /mpc_waypoints
+  output_interface: ctrl_raw
+  publish_debug_values: True
+  show_debug_info: False
+  # Vehicle related params loaded from platform_params.yaml
+
+stanley_controller:
+  # these parameters are tuned for Lexus rx450h with control loop running at 30 Hz
+  path_smoothing_times: 5
+  update_rate: 30
+  kp_yaw_error: 0.5
+  kd_yaw_error: 0.3
+  kp_lateral_error: 0.5
+  out_ctrl_cmd_name: /ctrl_raw
+  output_interface: ctrl_cmd
+  preview_window: 0.0
+
+# used in simulation mode
+wf_simulator:
+  loop_rate: 30.0
+  initialize_source: RVIZ
+  add_measurement_noise: False
+  use_waypoints_for_z_position_source: False
+  vehicle_model_type: IDEAL_STEER
+  simulation_frame_id: /base_link
+  lidar_frame_id: /velodyne
+  sim_pose_name: /current_pose
+  sim_velocity_name: /current_velocity
+  vel_lim: 30
+  angvel_lim: 3
+  vel_time_delay: 0.25
+  vel_time_constant: 0.6
+  angvel_time_delay: 0.2
+  angvel_time_constant: 0.4
+  steer_lim: 1
+  steer_rate_lim: 0.5
+  steer_time_delay: 0.24
+  steer_time_constant: 0.27

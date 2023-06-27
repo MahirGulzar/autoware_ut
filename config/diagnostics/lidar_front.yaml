@@ -1,0 +1,17 @@
+analyzers:
+  lidars:
+    type: diagnostic_aggregator/AnalyzerGroup
+    path: Lidars
+    analyzers:
+      lidar_front_publish:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: lidar_front_publish
+        find_and_remove_prefix: 'lidar_front/os_cloud_node: '
+        num_items: 1
+        timeout: 2
+      lidar_front_api:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: lidar_front_api
+        find_and_remove_prefix: 'lidar_front/diagnostics_node: '
+        num_items: 2
+        timeout: 2

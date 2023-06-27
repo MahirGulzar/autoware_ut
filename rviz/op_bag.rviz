@@ -1,0 +1,775 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 78
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1/Fixed Frame1
+        - /Global Options1/Background Color1
+        - /Global Options1/Frame Rate1
+        - /Global Options1/Default Light1
+        - /System1/Health1
+        - /Sensing1/Lidars1
+        - /Sensing1/Radar1
+        - /Perception1/Tracked Objects1
+      Splitter Ratio: 0.5856031179428101
+    Tree Height: 1141
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.5886790156364441
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Experimental: false
+    Name: Time
+    SyncMode: 0
+    SyncSource: no grnd single
+Preferences:
+  PromptSaveOnExit: true
+Toolbars:
+  toolButtonStyle: 2
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/TF
+          Enabled: true
+          Frame Timeout: 15
+          Frames:
+            All Enabled: true
+            base_link:
+              Value: true
+            camera_fl:
+              Value: true
+            camera_fr:
+              Value: true
+            imu:
+              Value: true
+            interfacea_link0:
+              Value: true
+            interfacea_link1:
+              Value: true
+            interfacea_link2:
+              Value: true
+            interfacea_link3:
+              Value: true
+            lidar:
+              Value: true
+            lidar_center/os_imu:
+              Value: true
+            lidar_center/os_lidar:
+              Value: true
+            lidar_center/os_sensor:
+              Value: true
+            lidar_front:
+              Value: true
+            map:
+              Value: true
+            radar_fc:
+              Value: true
+            velodyne:
+              Value: true
+          Marker Scale: 5
+          Name: TF
+          Show Arrows: true
+          Show Axes: true
+          Show Names: true
+          Tree:
+            map:
+              base_link:
+                imu:
+                  {}
+                lidar_center/os_sensor:
+                  lidar:
+                    camera_fl:
+                      {}
+                    camera_fr:
+                      {}
+                    interfacea_link0:
+                      {}
+                    interfacea_link1:
+                      {}
+                    interfacea_link2:
+                      {}
+                    interfacea_link3:
+                      {}
+                  lidar_center/os_imu:
+                    {}
+                  lidar_center/os_lidar:
+                    {}
+                  velodyne:
+                    {}
+                lidar_front:
+                  {}
+                radar_fc:
+                  {}
+          Update Interval: 0
+          Value: true
+        - Class: rviz/Group
+          Displays:
+            - Buffer length: 100
+              Class: jsk_rviz_plugin/Plotter2D
+              Enabled: true
+              Name: Velocity (km/h)
+              Show Value: true
+              Topic: /op_actual_velocity_rviz
+              Value: true
+              auto color change: false
+              auto scale: true
+              background color: 0; 0; 0
+              backround alpha: 0
+              border: true
+              foreground alpha: 0.699999988079071
+              foreground color: 25; 255; 240
+              height: 128
+              left: 128
+              linewidth: 1
+              max color: 255; 0; 0
+              max value: 1
+              min value: -1
+              show caption: true
+              text size: 12
+              top: 128
+              update interval: 0.03999999910593033
+              width: 128
+          Enabled: true
+          Name: Monitor
+        - Class: rviz/Group
+          Displays: ~
+          Enabled: true
+          Name: Health
+      Enabled: true
+      Name: System
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /vector_map
+          Name: ADAS Map
+          Namespaces:
+            cross_road: true
+            cross_walk: true
+            curb: true
+            road_sign: true
+            signal: true
+            stop_line: true
+            white_line: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /lanelet2_map_viz
+          Name: Lanelet2 Map
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Points Map
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.009999999776482582
+          Style: Flat Squares
+          Topic: /points_map
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+      Enabled: true
+      Name: Map
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/Group
+              Displays:
+                - Alpha: 1
+                  Autocompute Intensity Bounds: true
+                  Autocompute Value Bounds:
+                    Max Value: 10
+                    Min Value: -10
+                    Value: true
+                  Axis: Z
+                  Channel Name: intensity
+                  Class: rviz/PointCloud2
+                  Color: 255; 0; 255
+                  Color Transformer: FlatColor
+                  Decay Time: 0
+                  Enabled: true
+                  Invert Rainbow: false
+                  Max Color: 255; 255; 255
+                  Max Intensity: 220
+                  Min Color: 0; 0; 0
+                  Min Intensity: 0
+                  Name: raw center
+                  Position Transformer: XYZ
+                  Queue Size: 10
+                  Selectable: true
+                  Size (Pixels): 3
+                  Size (m): 0.10000000149011612
+                  Style: Squares
+                  Topic: /lidar_center/points_raw
+                  Unreliable: false
+                  Use Fixed Frame: true
+                  Use rainbow: true
+                  Value: true
+                - Alpha: 1
+                  Autocompute Intensity Bounds: true
+                  Autocompute Value Bounds:
+                    Max Value: 10
+                    Min Value: -10
+                    Value: true
+                  Axis: Z
+                  Channel Name: intensity
+                  Class: rviz/PointCloud2
+                  Color: 255; 0; 255
+                  Color Transformer: FlatColor
+                  Decay Time: 0
+                  Enabled: true
+                  Invert Rainbow: false
+                  Max Color: 255; 255; 255
+                  Max Intensity: 220
+                  Min Color: 0; 0; 0
+                  Min Intensity: 0
+                  Name: raw front
+                  Position Transformer: XYZ
+                  Queue Size: 10
+                  Selectable: true
+                  Size (Pixels): 3
+                  Size (m): 0.10000000149011612
+                  Style: Squares
+                  Topic: /lidar_front/points_raw
+                  Unreliable: false
+                  Use Fixed Frame: true
+                  Use rainbow: true
+                  Value: true
+                - Alpha: 1
+                  Autocompute Intensity Bounds: true
+                  Autocompute Value Bounds:
+                    Max Value: 10
+                    Min Value: -10
+                    Value: true
+                  Axis: Z
+                  Channel Name: intensity
+                  Class: rviz/PointCloud2
+                  Color: 255; 0; 255
+                  Color Transformer: FlatColor
+                  Decay Time: 0
+                  Enabled: true
+                  Invert Rainbow: false
+                  Max Color: 255; 255; 255
+                  Max Intensity: 220
+                  Min Color: 0; 0; 0
+                  Min Intensity: 0
+                  Name: raw single
+                  Position Transformer: XYZ
+                  Queue Size: 10
+                  Selectable: true
+                  Size (Pixels): 3
+                  Size (m): 0.10000000149011612
+                  Style: Squares
+                  Topic: /points_raw
+                  Unreliable: false
+                  Use Fixed Frame: true
+                  Use rainbow: true
+                  Value: true
+              Enabled: false
+              Name: raw
+            - Class: rviz/Group
+              Displays:
+                - Alpha: 1
+                  Autocompute Intensity Bounds: true
+                  Autocompute Value Bounds:
+                    Max Value: 10
+                    Min Value: -10
+                    Value: true
+                  Axis: Z
+                  Channel Name: intensity
+                  Class: rviz/PointCloud2
+                  Color: 0; 0; 255
+                  Color Transformer: FlatColor
+                  Decay Time: 0
+                  Enabled: true
+                  Invert Rainbow: false
+                  Max Color: 255; 255; 255
+                  Max Intensity: 220
+                  Min Color: 0; 0; 0
+                  Min Intensity: 0
+                  Name: no grnd single
+                  Position Transformer: XYZ
+                  Queue Size: 10
+                  Selectable: true
+                  Size (Pixels): 3
+                  Size (m): 0.20000000298023224
+                  Style: Squares
+                  Topic: /detection/lidar/points_no_ground
+                  Unreliable: false
+                  Use Fixed Frame: true
+                  Use rainbow: true
+                  Value: true
+              Enabled: true
+              Name: No ground
+          Enabled: true
+          Name: Lidars
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/Group
+              Displays:
+                - Class: rviz/Image
+                  Enabled: true
+                  Image Topic: /camera_fl/image_raw
+                  Max Value: 1
+                  Median window: 5
+                  Min Value: 0
+                  Name: image_fl
+                  Normalize Range: true
+                  Queue Size: 2
+                  Transport Hint: raw
+                  Unreliable: false
+                  Value: true
+                - Class: rviz/Image
+                  Enabled: true
+                  Image Topic: /camera_fr/image_raw
+                  Max Value: 1
+                  Median window: 5
+                  Min Value: 0
+                  Name: image_fr
+                  Normalize Range: true
+                  Queue Size: 2
+                  Transport Hint: raw
+                  Unreliable: false
+                  Value: true
+              Enabled: false
+              Name: raw
+            - Class: rviz/Group
+              Displays:
+                - Class: rviz/Camera
+                  Enabled: true
+                  Image Rendering: background and overlay
+                  Image Topic: /camera_fl/image_raw
+                  Name: camera_fl
+                  Overlay Alpha: 0.5
+                  Queue Size: 2
+                  Transport Hint: raw
+                  Unreliable: false
+                  Value: true
+                  Visibility:
+                    Control:
+                      "": true
+                      Value: true
+                    Localization:
+                      "": true
+                      Value: true
+                    Map:
+                      "": true
+                      Value: true
+                    Perception:
+                      Clustered Points: true
+                      Tracked Objects: true
+                      Value: true
+                    Planning:
+                      Behavior State: true
+                      Center lines: true
+                      Ego Safety Box: true
+                      Global Path: true
+                      Local Eval Rollouts: true
+                      Local Gen Rollouts: true
+                      Local Selected Trajectory: true
+                      Predicted Trajectories: true
+                      Value: true
+                    Sensing:
+                      Cameras:
+                        Value: true
+                        cameras:
+                          Value: true
+                          camera_fr: true
+                        raw:
+                          "": true
+                          Value: true
+                      Lidars:
+                        No ground:
+                          Value: true
+                          no grnd single: true
+                        Value: true
+                        raw:
+                          Value: true
+                          raw center: true
+                          raw front: true
+                          raw single: true
+                      Radar:
+                        "": true
+                        Value: true
+                      Value: true
+                    Simulation:
+                      "": true
+                      Value: true
+                    System:
+                      "": true
+                      Value: false
+                    Value: true
+                  Zoom Factor: 1
+                - Class: rviz/Camera
+                  Enabled: true
+                  Image Rendering: background and overlay
+                  Image Topic: /camera_fr/image_raw
+                  Name: camera_fr
+                  Overlay Alpha: 0.5
+                  Queue Size: 2
+                  Transport Hint: raw
+                  Unreliable: false
+                  Value: true
+                  Visibility:
+                    Control:
+                      "": true
+                      Value: true
+                    Localization:
+                      "": true
+                      Value: true
+                    Map:
+                      "": true
+                      Value: true
+                    Perception:
+                      Clustered Points: true
+                      Tracked Objects: true
+                      Value: true
+                    Planning:
+                      Behavior State: true
+                      Center lines: true
+                      Ego Safety Box: true
+                      Global Path: true
+                      Local Eval Rollouts: true
+                      Local Gen Rollouts: true
+                      Local Selected Trajectory: true
+                      Predicted Trajectories: true
+                      Value: true
+                    Sensing:
+                      Cameras:
+                        Value: true
+                        cameras:
+                          Value: true
+                          camera_fl: true
+                        raw:
+                          "": true
+                          Value: true
+                      Lidars:
+                        No ground:
+                          Value: true
+                          no grnd single: true
+                        Value: true
+                        raw:
+                          Value: true
+                          raw center: true
+                          raw front: true
+                          raw single: true
+                      Radar:
+                        "": true
+                        Value: true
+                      Value: true
+                    Simulation:
+                      "": true
+                      Value: true
+                    System:
+                      "": true
+                      Value: false
+                    Value: true
+                  Zoom Factor: 1
+              Enabled: false
+              Name: cameras
+          Enabled: true
+          Name: Cameras
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/MarkerArray
+              Enabled: true
+              Marker Topic: /detection/radar/detected_polygons
+              Name: Detected Polygons
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+          Enabled: true
+          Name: Radar
+      Enabled: true
+      Name: Sensing
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Axes Length: 1
+          Axes Radius: 0.10000000149011612
+          Class: rviz/Pose
+          Color: 255; 25; 0
+          Enabled: true
+          Head Length: 0.30000001192092896
+          Head Radius: 0.10000000149011612
+          Name: Current Pose
+          Shaft Length: 1
+          Shaft Radius: 0.05000000074505806
+          Shape: Arrow
+          Topic: /current_pose
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: Localization
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /objects_markers
+          Name: Tracked Objects
+          Namespaces:
+            //arrow_markers: true
+            //box_markers: true
+            //centroid_markers: true
+            //hull_markers: true
+            //label_markers: true
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: RGB8
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Clustered Points
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 10
+          Size (m): 0.009999999776482582
+          Style: Points
+          Topic: /detection/lidar/points_cluster
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+      Enabled: true
+      Name: Perception
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /behavior_state
+          Name: Behavior State
+          Namespaces:
+            beh_state: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /vector_map_center_lines_rviz
+          Name: Center lines
+          Namespaces:
+            road_network_stop_line: true
+            road_network_vector_map: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /global_waypoints_rviz
+          Name: Global Path
+          Namespaces:
+            global_lane_array_marker: true
+            global_lane_waypoint_orientation_marker: true
+            global_velocity_lane_1: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: false
+          Marker Topic: /local_trajectories_gen_rviz
+          Name: Local Gen Rollouts
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: false
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /local_trajectories_eval_rviz
+          Name: Local Eval Rollouts
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: false
+          Marker Topic: /local_selected_trajectory_rviz
+          Name: Local Selected Trajectory
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: false
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /predicted_trajectories_rviz
+          Name: Predicted Trajectories
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /safety_border
+          Name: Ego Safety Box
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: Planning
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /mpc_follower/debug/predicted_traj
+          Name: MPC Predicted Trajectory
+          Namespaces:
+            predicted_traj: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /mpc_follower/debug/filtered_traj
+          Name: MPC Reference Trajectory
+          Namespaces:
+            ref_traj: true
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: Control
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /simu_global_trajectory_2
+          Name: Simu Trajectory
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /curr_simu_pose_2
+          Name: Simu Marker
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /safety_border_2
+          Name: Simu Safetybox
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: Simulation
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Default Light: true
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
+      Topic: /initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
+  Value: true
+  Views:
+    Current:
+      Angle: 2.1900007724761963
+      Class: rviz/TopDownOrtho
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Scale: 21.859384536743164
+      Target Frame: base_link
+      Value: TopDownOrtho (rviz)
+      X: -4.616557598114014
+      Y: 8.269493103027344
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 1416
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000020400000500fc020000000dfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000002700000500000000c900fffffffb0000001200630061006d006500720061005f0066006c00000003880000019f0000001600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb000000100069006d006100670065005f0066006c000000036d000001ba0000001600fffffffb000000100069006d006100670065005f0066006c0100000396000000d90000000000000000fb000000100069006d006100670065005f00660072000000046f000000b80000001600fffffffb0000001200630061006d006500720061005f0066006c000000035c000001cb000000000000000000000001000001a800000500fc0200000006fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000002700000500000000a400fffffffb0000001200630061006d006500720061005f006600720000000357000001d00000001600fffffffb000000100069006d006100670065005f006600720000000385000001a20000000000000000fb0000001200630061006d006500720061005f00660072010000038b0000019c0000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000009bf0000003efc0100000002fb0000000800540069006d00650100000000000009bf000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000006070000050000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Time:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 2495
+  X: 65
+  Y: 24
+  camera_fl:
+    collapsed: false
+  camera_fr:
+    collapsed: false
+  image_fl:
+    collapsed: false
+  image_fr:
+    collapsed: false

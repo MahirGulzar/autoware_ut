@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="save_filename"   default="/tmp/saved_waypoints.csv" />
+
+
+<!--     <include file="$(find autoware_ut)/launch/platform.launch">
+        <arg name="use_diagnostics" value="false"/>
+        <arg name="use_engage_button" value="false"/>
+    </include>
+ -->
+
+<!--     <include file="$(find autoware_ut)/launch/autonomy_localization.launch">
+        <arg name="use_vector_map" value="false" />
+        <arg name="map_name" value="rally_2020_sulaoja/" />
+        <arg name="use_gpsins_localizer" value="true" />
+    </include>
+ -->
+ 
+    <!-- Waypoint Collection -->
+    <node pkg="waypoint_maker" type="waypoint_saver" name="waypoint_saver" output="screen">
+        <param name="save_filename"     value="$(arg save_filename)" />
+        <param name="interval"          value="1" />
+        <param name="velocity_topic"    value="current_velocity" />
+        <param name="pose_topic"        value="current_pose" />
+        <param name="save_velocity"     value="true" />
+    </node>
+
+    <!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find autoware_ut)/config/rviz/waypoint_saving.rviz" /> -->
+
+</launch>

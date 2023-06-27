@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="planner"                     default="openplanner" doc="{openplanner, decisionmaker}"/>
+    <arg name="map_name"                    default="tartu" />
+    
+    <arg name="use_webapp"                  default="false" />
+    <arg name="use_modern_mobility_api"     default="false" />
+    <arg name="use_modern_mobility_live"    default="false" />
+
+
+    <!-- Webapp -->
+    <node if="$(arg use_webapp)" pkg="autoware_ut" type="app.py" name="op_webapp" cwd="node" >
+        <param name="stops_file" value="$(find autoware_ut)/maps/$(arg map_name)/dropoff_points.json" />
+    </node>
+
+    <!-- Modern Mobility -->
+    <include if="$(arg use_modern_mobility_api)" file="$(find autoware_ut)/launch/nodes/modern_mobility.launch">
+        <arg name="map_name"                 value="$(arg map_name)" />
+        <arg name="use_modern_mobility_live" value="$(arg use_modern_mobility_live)" />
+    </include>
+
+    <!-- Launch if openplanner is used -->
+    <group if="$(eval arg('planner')=='openplanner')">
+        <!-- Publish messages for rviz graphs and overlay text -->
+        <node name="rviz_labels_publisher" pkg="autoware_ut" type="rviz_labels_publisher.py" />
+    </group>
+
+</launch>

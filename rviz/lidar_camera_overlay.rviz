@@ -1,0 +1,502 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 0
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Sensing1/Points Raw1
+      Splitter Ratio: 0.642276406288147
+    Tree Height: 452
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.5886790156364441
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Experimental: false
+    Name: Time
+    SyncMode: 0
+    SyncSource: ""
+  - Class: autoware_rviz_debug/DecisionMakerPanel
+    Name: DecisionMakerPanel
+Preferences:
+  PromptSaveOnExit: true
+Toolbars:
+  toolButtonStyle: 2
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: false
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: false
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/TF
+          Enabled: false
+          Frame Timeout: 15
+          Frames:
+            All Enabled: true
+          Marker Scale: 5
+          Name: TF
+          Show Arrows: true
+          Show Axes: true
+          Show Names: true
+          Tree:
+            {}
+          Update Interval: 0
+          Value: false
+        - Alpha: 1
+          Class: rviz/RobotModel
+          Collision Enabled: false
+          Enabled: true
+          Links:
+            All Links Enabled: true
+            Expand Joint Details: false
+            Expand Link Details: false
+            Expand Tree: false
+            Link Tree Style: Links in Alphabetic Order
+          Name: Vehicle Model
+          Robot Description: robot_description
+          TF Prefix: ""
+          Update Interval: 0
+          Value: true
+          Visual Enabled: true
+        - Class: rviz/Group
+          Displays:
+            - Buffer length: 100
+              Class: jsk_rviz_plugin/Plotter2D
+              Enabled: true
+              Name: Velocity (km/h)
+              Show Value: true
+              Topic: /linear_velocity_viz
+              Value: true
+              auto color change: false
+              auto scale: true
+              background color: 0; 0; 0
+              backround alpha: 0
+              border: true
+              foreground alpha: 1
+              foreground color: 0; 255; 255
+              height: 80
+              left: 40
+              linewidth: 1
+              max color: 255; 0; 0
+              max value: 1
+              min value: -1
+              show caption: true
+              text size: 8
+              top: 30
+              update interval: 0.03999999910593033
+              width: 80
+            - Buffer length: 100
+              Class: jsk_rviz_plugin/Plotter2D
+              Enabled: true
+              Name: NDT Time [ms]
+              Show Value: true
+              Topic: /time_ndt_matching
+              Value: true
+              auto color change: false
+              auto scale: true
+              background color: 0; 0; 0
+              backround alpha: 0
+              border: true
+              foreground alpha: 1
+              foreground color: 0; 255; 255
+              height: 80
+              left: 140
+              linewidth: 1
+              max color: 255; 0; 0
+              max value: 1
+              min value: -1
+              show caption: true
+              text size: 8
+              top: 30
+              update interval: 0.03999999910593033
+              width: 80
+            - Align Bottom: false
+              Background Alpha: 0.8999999761581421
+              Background Color: 0; 0; 0
+              Class: jsk_rviz_plugin/OverlayText
+              Enabled: true
+              Foreground Alpha: 0.800000011920929
+              Foreground Color: 0; 255; 255
+              Invert Shadow: false
+              Name: NDT Monitor
+              Overtake BG Color Properties: false
+              Overtake FG Color Properties: false
+              Overtake Position Properties: true
+              Topic: /ndt_monitor/ndt_info_text
+              Value: true
+              font: DejaVu Sans Mono
+              height: 50
+              left: 40
+              line width: 2
+              text size: 8
+              top: 150
+              width: 200
+            - Align Bottom: false
+              Background Alpha: 0.8999999761581421
+              Background Color: 0; 0; 0
+              Class: jsk_rviz_plugin/OverlayText
+              Enabled: true
+              Foreground Alpha: 0.800000011920929
+              Foreground Color: 0; 255; 255
+              Invert Shadow: false
+              Name: Decision Maker Panel
+              Overtake BG Color Properties: false
+              Overtake FG Color Properties: false
+              Overtake Position Properties: true
+              Topic: /decision_maker/state_overlay
+              Value: true
+              font: DejaVu Sans Mono
+              height: 200
+              left: 40
+              line width: 2
+              text size: 8
+              top: 220
+              width: 200
+          Enabled: true
+          Name: Monitor
+        - Class: rviz/Group
+          Displays:
+            - Align Bottom: false
+              Background Alpha: 0.800000011920929
+              Background Color: 0; 0; 0
+              Class: jsk_rviz_plugin/OverlayText
+              Enabled: true
+              Foreground Alpha: 0.800000011920929
+              Foreground Color: 25; 255; 240
+              Invert Shadow: false
+              Name: OK
+              Overtake BG Color Properties: false
+              Overtake FG Color Properties: false
+              Overtake Position Properties: true
+              Topic: /health_aggregator/ok_text
+              Value: true
+              font: DejaVu Sans Mono
+              height: 80
+              left: 40
+              line width: 2
+              text size: 6
+              top: 430
+              width: 200
+            - Align Bottom: false
+              Background Alpha: 0.800000011920929
+              Background Color: 0; 0; 0
+              Class: jsk_rviz_plugin/OverlayText
+              Enabled: true
+              Foreground Alpha: 0.800000011920929
+              Foreground Color: 255; 255; 0
+              Invert Shadow: false
+              Name: WARN
+              Overtake BG Color Properties: false
+              Overtake FG Color Properties: false
+              Overtake Position Properties: true
+              Topic: /health_aggregator/warn_text
+              Value: true
+              font: DejaVu Sans Mono
+              height: 80
+              left: 40
+              line width: 2
+              text size: 6
+              top: 520
+              width: 200
+            - Align Bottom: false
+              Background Alpha: 0.800000011920929
+              Background Color: 0; 0; 0
+              Class: jsk_rviz_plugin/OverlayText
+              Enabled: true
+              Foreground Alpha: 0.800000011920929
+              Foreground Color: 255; 85; 0
+              Invert Shadow: false
+              Name: ERROR
+              Overtake BG Color Properties: false
+              Overtake FG Color Properties: false
+              Overtake Position Properties: true
+              Topic: /health_aggregator/error_text
+              Value: true
+              font: DejaVu Sans Mono
+              height: 80
+              left: 40
+              line width: 2
+              text size: 6
+              top: 620
+              width: 200
+            - Align Bottom: false
+              Background Alpha: 0.800000011920929
+              Background Color: 0; 0; 0
+              Class: jsk_rviz_plugin/OverlayText
+              Enabled: true
+              Foreground Alpha: 0.800000011920929
+              Foreground Color: 255; 0; 0
+              Invert Shadow: false
+              Name: FATAL
+              Overtake BG Color Properties: false
+              Overtake FG Color Properties: false
+              Overtake Position Properties: true
+              Topic: /health_aggregator/fatal_text
+              Value: true
+              font: DejaVu Sans Mono
+              height: 80
+              left: 40
+              line width: 2
+              text size: 6
+              top: 720
+              width: 200
+          Enabled: true
+          Name: Health Checker
+      Enabled: false
+      Name: System
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0.05000000074505806
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Points Map
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 2
+          Size (m): 0.009999999776482582
+          Style: Points
+          Topic: /points_map
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /vector_map
+          Name: ADAS Map
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: false
+          Marker Topic: /lanelet2_map_viz
+          Name: Lanelet2 Map
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: false
+      Enabled: false
+      Name: Map
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 23.83440399169922
+            Min Value: -22.532455444335938
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 199
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Points Raw
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 5
+          Size (m): 0.009999999776482582
+          Style: Points
+          Topic: /points_raw
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+      Enabled: true
+      Name: Sensing
+    - Class: rviz/Camera
+      Enabled: true
+      Image Rendering: background and overlay
+      Image Topic: /camera_fl/image_raw
+      Name: CameraFL
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+      Visibility:
+        CameraFR: true
+        Grid: true
+        Map:
+          ADAS Map: true
+          Lanelet2 Map: true
+          Points Map: true
+          Value: true
+        Sensing:
+          Points Raw: true
+          Value: true
+        System:
+          Health Checker:
+            ERROR: true
+            FATAL: true
+            OK: true
+            Value: true
+            WARN: true
+          Monitor:
+            Decision Maker Panel: true
+            NDT Monitor: true
+            NDT Time [ms]: true
+            Value: true
+            Velocity (km/h): true
+          TF: true
+          Value: true
+          Vehicle Model: true
+        Value: true
+      Zoom Factor: 1
+    - Class: rviz/Camera
+      Enabled: false
+      Image Rendering: background and overlay
+      Image Topic: /camera_fr/image_raw
+      Name: CameraFR
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+      Visibility:
+        CameraFL: true
+        Grid: true
+        Map:
+          ADAS Map: true
+          Lanelet2 Map: true
+          Points Map: true
+          Value: true
+        Sensing:
+          Points Raw: true
+          Value: true
+        System:
+          Health Checker:
+            ERROR: true
+            FATAL: true
+            OK: true
+            Value: true
+            WARN: true
+          Monitor:
+            Decision Maker Panel: true
+            NDT Monitor: true
+            NDT Time [ms]: true
+            Value: true
+            Velocity (km/h): true
+          TF: true
+          Value: true
+          Vehicle Model: true
+        Value: true
+      Zoom Factor: 1
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Default Light: true
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
+      Topic: /initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
+  Value: true
+  Views:
+    Current:
+      Angle: 2.0799994468688965
+      Class: rviz/TopDownOrtho
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Scale: 12.408814430236816
+      Target Frame: base_link
+      Value: TopDownOrtho (rviz)
+      X: -0.02661990374326706
+      Y: -4.30233097076416
+    Saved: ~
+Window Geometry:
+  CameraFL:
+    collapsed: false
+  CameraFR:
+    collapsed: false
+  DecisionMakerPanel:
+    collapsed: false
+  Displays:
+    collapsed: false
+  Height: 701
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000027400000201fc0200000020fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003d000000c90000000000fffffffa000000000100000002fb0000000a0049006d0061006700650100000000ffffffff0000000000000000fb0000000c00430061006d0065007200610000000000ffffffff0000000000000000fb0000000a0049006d0061006700650000000356000000480000000000000000fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb000000120049006d006100670065005f0072006100770000000000ffffffff0000000000000000fb0000000c00430061006d006500720061000000024e000001710000000000000000fb000000120049006d00610067006500200052006100770100000421000000160000000000000000fb0000000a0049006d006100670065000000020b000001930000000000000000fb0000000a0049006d006100670065010000056c0000026c0000000000000000fb00000024004400650063006900730069006f006e004d0061006b0065007200500061006e0065006c00000002110000018f0000018a00fffffffb0000000a0049006d00610067006501000001f9000001a50000000000000000fb0000000a0049006d0061006700650100000129000002750000000000000000fb0000001400460072006f006e00740020004c0065006600740000000216000001880000000000000000fb0000000c00430061006d0065007200610000000145000002590000000000000000fb0000000c00430061006d0065007200610100000145000002590000000000000000fb0000000c00430061006d00650072006101000001290000011c0000000000000000fb0000000a0049006d006100670065010000024b000001530000000000000000fb0000001600660072006f006e0074002000720069006700680074010000018d000002110000000000000000fb0000000c00430061006d006500720061010000016b000002330000000000000000fb0000000c00430061006d0065007200610100000255000001490000000000000000fb0000000a0049006d00610067006501000002d6000000c80000000000000000fb0000000c00430061006d0065007200610100000129000002750000000000000000fb0000001600460072006f006e007400200052006900670068007400000003600000003e0000000000000000fb0000000a0049006d006100670065000000022f0000016f0000000000000000fb0000000c0046004c0020005200410057010000003d0000011c0000000000000000fb0000000a0046004c002000530049010000015f000000cf0000000000000000fc0000003d000002010000001600fffffffa000000010100000002fb0000001000430061006d006500720061004600520000000000ffffffff0000007b00fffffffb0000001000430061006d0065007200610046004c01000000000000035c0000007800ffffff000000010000015600000201fc0200000006fb000000100044006900730070006c006100790073010000003d00000201000000c900fffffffb0000000c004600520020005200410057000000003d000001350000000000000000fb0000000a00460052002000530049000000003d0000010f0000000000000000fb0000000a00560069006500770073000000028e00000257000000a400fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000a00000000a8fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000003f60000005cfc0100000002fb0000000800540069006d00650100000000000003f6000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000000200000020100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Time:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1014
+  X: 77
+  Y: 48

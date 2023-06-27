@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_api"             default="true"/>
+    <arg name="api_method"          default="mqtt" doc="{http, mqtt, carla}" />
+    <arg name="api_timeout"         default="1.5"/>
+    <arg name="use_cam"             default="true"/>
+    <arg name="cam_method"          default="astuff" doc="{astuff, color, yolo}" />
+    <arg name="map_name"            default="tartu_demo_route" />
+    <arg name="use_lanelet2_map"    default="false"/>
+    <arg name="rectify"             default="false"/>
+
+
+    <group if="$(arg use_cam)">
+        <!-- Select feature projection: Autoware maps or lanelet2 based -->
+        <group if="$(arg use_lanelet2_map)">
+            <node pkg="trafficlight_recognizer" type="feat_proj_lanelet2" name="feature_proj_left" output="screen" />
+            <node pkg="trafficlight_recognizer" type="feat_proj_lanelet2" name="feature_proj_right" output="screen" />
+        </group>
+
+        <group unless="$(arg use_lanelet2_map)">
+            <node pkg="trafficlight_recognizer" type="feat_proj" name="feature_proj_left" output="screen" />
+            <node pkg="trafficlight_recognizer" type="feat_proj" name="feature_proj_right" output="screen" />
+        </group>
+
+        <!-- astuff: Original network -->
+        <group if="$(eval arg('cam_method') == 'astuff')">
+            <node pkg="trafficlight_recognizer" type="region_tlr_tensorflow" name="region_tlr_left" output="screen">
+                <param name="image_raw_topic" value="/camera_fl/image_rect_color" if="$(arg rectify)"/>
+                <param name="image_raw_topic" value="/camera_fl/image_raw" unless="$(arg rectify)" />
+            </node>
+
+            <node pkg="trafficlight_recognizer" type="region_tlr_tensorflow" name="region_tlr_right" output="screen" >
+                <param name="image_raw_topic" value="/camera_fr/image_rect_color" if="$(arg rectify)"/>
+                <param name="image_raw_topic" value="/camera_fr/image_raw" unless="$(arg rectify)" />
+            </node>
+
+            <!-- Classifier -->
+            <node pkg="trafficlight_recognizer" type="tensorflow_tlr.py" name="tensorflow_tlr" output="screen" >
+                <param name="nn_model_path" value="$(find autoware_ut)/config/tfl_models/tlr_model2.hdf5" />
+            </node>
+        </group>
+
+        <!-- color: color based classification -->
+        <group if="$(eval arg('cam_method') == 'color')">
+            <node pkg="trafficlight_recognizer" type="region_tlr" name="color_tlr_left" output="screen" >
+                <param name="image_raw_topic" value="/camera_fl/image_rect_color" if="$(arg rectify)"/>
+                <param name="image_raw_topic" value="/camera_fl/image_raw" unless="$(arg rectify)" />
+            </node>
+
+            <node pkg="trafficlight_recognizer" type="region_tlr" name="color_tlr_right" output="screen" >
+                <param name="image_raw_topic" value="/camera_fr/image_rect_color" if="$(arg rectify)"/>
+                <param name="image_raw_topic" value="/camera_fr/image_raw" unless="$(arg rectify)" />
+            </node>
+        </group>
+
+        <!-- yolo: uses yolo network -->
+        <group if="$(eval arg('cam_method') == 'yolo')">
+            <node pkg="trafficlight_recognizer" type="tlr_yolo.py" name="tlr_yolo_left" output="screen" >
+                <param name="camera_id" value="/camera_fl/image_rect_color" if="$(arg rectify)"/>
+                <param name="camera_id" value="/camera_fl/image_raw" unless="$(arg rectify)" />
+                <param name="nn_model_path" value="$(find autoware_ut)/config/tfl_models/yolov3-tiny-608.onnx"/>
+            </node>
+            <node pkg="trafficlight_recognizer" type="tlr_yolo.py" name="tlr_yolo_right" output="screen" >
+                <param name="camera_id" value="/camera_fr/image_rect_color" if="$(arg rectify)"/>
+                <param name="camera_id" value="/camera_fr/image_raw" unless="$(arg rectify)" />
+                <param name="nn_model_path" value="$(find autoware_ut)/config/tfl_models/yolov3-tiny-608.onnx"/>
+            </node>
+        </group>
+    </group>
+
+    <remap unless="$(arg use_cam)" from="/ib/roi_signal" to="/roi_signal" />
+    <remap from="/diagnostics" to="/unprocessed_diagnostics" />
+
+    <group if="$(arg use_api)">
+        <node if="$(eval arg('api_method') == 'mqtt')" pkg="autoware_ut" type="ib_tls_mqtt.py" name="ib_tls" output="screen" >
+            <param name="tl_grouping_file" type="str" value="$(find autoware_ut)/maps/$(arg map_name)/vector_map/tl_stoplines.json" />
+            <param name="mqtt_topic" type="str" value="#" />
+        </node>
+        <!-- TODO change ib_tls_http.py -->
+        <node if="$(eval arg('api_method') == 'http')" pkg="autoware_ut" type="ib_tls_http.py" name="ib_tls" output="screen" >
+            <param name="tl_grouping_file" type="str" value="$(find autoware_ut)/maps/$(arg map_name)/vector_map/tl_stoplines.json" />
+            <param name="api_url" type="str" value="https://iseauto.foor.ee?int=0" />
+        </node>
+    </group>
+
+    <!-- Merge both roi_signal topics -->
+    <group if="$(arg use_cam)">
+        <node pkg="autoware_ut" type="roi_merger.py" name="roi_merger" output="screen">
+            <param if="$(eval arg('cam_method')=='yolo')"      name="use_yolo" value="true" />
+            <param unless="$(eval arg('cam_method')=='yolo')"  name="use_yolo" value="false" />
+        </node>
+    </group>
+
+    <!-- Visualize Trafficlight detection result -->
+    <node pkg="autoware_ut" type="tl_visualizer" name="tl_visualizer" output="screen">
+        <param name="debug_link_ids" value="false" />
+    </node>
+
+</launch>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="planner"                 default="decisionmaker"   doc="{openplanner, decisionmaker}"/>
+    <arg name="use_sim_mode"            default="true" />
+    <arg name="use_obstacle_detection"  default="true" />
+    <arg name="use_tl_detection"        default="true" /> 
+    <arg name="init_params"             default="true" />
+
+    
+    <group if="$(arg init_params)">
+        <!-- Load Localization parameters -->
+        <rosparam unless="$(arg use_sim_mode)" command="load" subst_value="true" file="$(find autoware_ut)/config/localization.yaml"/>
+
+        <!-- Load Decision Maker / Oenplanner parameters -->
+        <rosparam if="$(eval arg('planner')=='decisionmaker')" command="load" subst_value="true" file="$(find autoware_ut)/config/decisionmaker.yaml"/>
+        <rosparam if="$(eval arg('planner')=='openplanner')" command="load" subst_value="true" file="$(find autoware_ut)/config/openplanner.yaml"/>
+
+        <!-- Load Control / Motion planning parameters -->
+        <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/control.yaml"/>
+
+        <!-- Load Detection parameters -->
+        <rosparam if="$(eval (use_tl_detection) or (use_obstacle_detection))" command="load" subst_value="true" file="$(find autoware_ut)/config/detection.yaml"/>
+
+        <!-- Platform Params -->
+        <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/platform.yaml"/>
+    </group>
+
+</launch>

@@ -1,0 +1,62 @@
+.config_params:
+  - &save_waypoints_file /tmp/saved_waypoints.csv
+  - &lidar_frame lidar
+
+# Autoware transform params
+localizer: *lidar_frame
+
+# Location where new waypoint files are saved
+waypoint_saver:
+  save_filename: *save_waypoints_file
+
+# Localization
+voxel_grid_filter:
+  measurement_range: 100.0
+  points_topic: points_raw
+
+ndt_matching:
+  get_height: true
+  method_type: 3
+  use_odom: true
+  gnss_reinit_fitness: 100
+  output_tf_frame_id: base_link
+  imu_upside_down: true
+
+region_tlr_tensorflow:
+  use_converted_map: false
+  use_peoria_hacks: false
+
+tensorflow_tlr:
+  nn_model_path: $(find common_platform)/config/tlr_model.hdf5
+
+ray_ground_filter:
+  radial_divider_angle: 0.9
+  concentric_divider_distance: 0.08
+  local_max_slope: 6
+  general_max_slope: 6
+  min_height_threshold: 0.1
+  reclass_distance_threshold: 0.1
+
+lidar_euclidean_cluster_detect:
+  cluster_size_min: 20
+  cluster_size_max: 20000
+
+twist_gate:
+  use_lgsim: true
+
+pure_pursuit:
+  lookahead_ratio: 1.8
+
+stanley_controller:
+  kp_yaw_error: 0.375
+  kd_yaw_error: 0.25
+  kd_lateral_error: 2.25
+
+mpc_follower:
+  output_interface: all
+
+# Detection
+vision_darknet_detect:
+  network_definition_file: $(find common_platform)/config/jolo/jolo.cfg
+  pretrained_model_file: $(find common_platform)/config/jolo/jolo.weights
+  names_file: $(find common_platform)/config/jolo/jolo.names

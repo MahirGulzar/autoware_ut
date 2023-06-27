@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="platform"                default="lexus"           doc="{lexus, sim_mode, svl_sim, carla_sim}"/>
+    <arg name="planner"                 default="decisionmaker"   doc="{openplanner, decisionmaker}"/>
+
+    <arg name="use_diagnostics"         default="true" />
+    <arg name="use_engage_button"       default="true" />
+    <arg name="use_button_panel"        default="true" />
+    <arg name="use_lidar_center"        default="true" />
+    <arg name="use_lidar_front"         default="true" />
+    <arg name="use_lidar_front_image"   default="false" />
+    <arg name="range_img_max"           default="50.0" />  <!-- Front lidar img -->
+    <arg name="use_radar"               default="true" />
+    <arg name="enable_raw_radar"        default="true" />
+    <arg name="use_obstacle_detection"  default="true" />
+    <arg name="use_tl_detection"        default="true" />
+    <arg name="use_cam"                 default="true"/> 
+    <arg name="use_api"                 default="true"/>
+    <arg name="use_camera_fr"           default="true" />
+    <arg name="use_camera_fl"           default="true" />
+    <arg name="rectify"                 default="false" />
+    <arg name="use_lexus_model"         default="true" />
+    <arg name="map_name"                default="tartu" /> 
+    <arg name="init_params"             default="true" />
+    <arg name='use_manual_control'      default="false" />      <!-- Toggle Carla's manual control-->  
+    <arg name="localizer"               default="gpsins"        doc="{gpsins, ndt, carla}" />
+    <arg name="detector"                default="clustering"    doc="{clustering, pointpillars, carla}"/>
+    <!-- Scenario Runner args -->
+    <arg name='use_scenario_runner'     default="false"/>
+    <arg name='scenario_runner_path'    default="$(optenv SCENARIO_RUNNER_ROOT)"/>
+    <arg name='scenario_name'           default="FollowLeadingVehicle"/>
+    <arg name='scenario_file'           default="$(find autoware_ut)/maps/$(arg map_name)/scenarios/$(arg scenario_name).xosc"/>
+
+
+
+    <!-- ================== Run platform in simulation mode ================== -->
+    <include if="$(eval arg('platform')=='sim_mode')" file="$(find autoware_ut)/launch/platform/sim_mode.launch" >
+        <arg name="planner"         value="$(arg planner)" />
+        <arg name="use_lexus_model" value="$(arg use_lexus_model)" />
+    </include>
+
+    <!-- ================== Run platform in real car and sensors ================== -->
+    <include if="$(eval arg('platform')=='lexus')" file="$(find autoware_ut)/launch/platform/lexus.launch" >
+        <arg name="use_diagnostics"         value="$(arg use_diagnostics)" />
+        <arg name="use_engage_button"       value="$(arg use_engage_button)" />
+        <arg name="use_button_panel"        value="$(arg use_button_panel)" />
+        <arg name="use_lidar_center"        value="$(arg use_lidar_center)" />
+        <arg name="use_lidar_front"         value="$(arg use_lidar_front)" />
+        <arg name="use_lidar_front_image"   value="$(arg use_lidar_front_image)" />
+        <arg name="range_img_max"           value="$(arg range_img_max)" />
+        <arg name="use_camera_fl"           value="$(arg use_camera_fl)" />
+        <arg name="use_camera_fr"           value="$(arg use_camera_fr)" />
+        <arg name="rectify"                 value="$(arg rectify)" />
+        <arg name="use_radar"               value="$(arg use_radar)" />
+        <arg name="enable_raw_radar"        value="$(arg enable_raw_radar)" />
+        <arg name="use_gnss"                value="true" />
+        <arg name="use_dbw"                 value="true" />
+        <arg name="use_ssc"                 value="true" />
+        <arg name="use_tf"                  value="true" />
+        <arg name="use_lexus_model"         value="$(arg use_lexus_model)" />
+    </include>
+
+    <!-- ================== Run platform in SVL simulation ================== -->
+    <include if="$(eval arg('platform')=='svl_sim')" file="$(find autoware_ut)/launch/platform/svl_sim.launch">
+        <arg name="planner"         value="$(arg planner)" />
+        <arg name="use_lexus_model" value="$(arg use_lexus_model)" />
+    </include>
+
+    <!-- ================== Run platform in CARLA simulation ================== -->
+    <include if="$(eval arg('platform')=='carla_sim')" file="$(find autoware_ut)/launch/platform/carla_sim.launch">
+        <arg name="use_lexus_model"             value="$(arg use_lexus_model)" />
+        <arg name='map_name'                    value='$(arg map_name)'/>
+        <arg name="use_manual_control"                  value="$(arg use_manual_control)" />
+        <arg name="use_obstacle_detection"              value="$(arg use_obstacle_detection)" />
+        <arg name="use_tl_detection"                    value="$(arg use_tl_detection)" />
+        <arg name="use_cam"                             value="$(arg use_cam)" />
+        <arg name="use_api"                             value="$(arg use_api)" />
+        <arg name="localizer"                           value="$(arg localizer)" />
+        <arg name="detector"                            value="$(arg detector)" />
+        <arg name="scenario_runner_path"                value="$(arg scenario_runner_path)" />
+        <arg name="use_scenario_runner"                 value="$(arg use_scenario_runner)" />
+        <arg name="scenario_name"                       value="$(arg scenario_name)" />
+        <arg name="scenario_file"                       value="$(arg scenario_file)" />
+    </include>
+
+    <!-- Platform Params -->
+    <group if="$(arg init_params)">
+        <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/platform.yaml"/>
+    </group>
+
+</launch>

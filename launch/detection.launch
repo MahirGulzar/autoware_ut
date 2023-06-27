@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="map_name"                default="tartu" />
+    <arg name="use_lanelet2_map"        default="false" />
+    <!-- obstacle_detection params -->
+    <arg name="use_fake_obstacles"      default="false" />   
+    <arg name="use_obstacle_detection"  default="true" />
+    <arg name="use_lidar_center"        default="true" />
+    <arg name="use_lidar_front"         default="true" />
+    <arg name="tracker"                 default="imm_ukf"   doc="{imm_ukf, cvkf}" />
+    <arg name="detector"                default="clustering" doc="{clustering, pointpillars}" />
+    <arg name="use_radar"               default="false" />
+    <arg name="enable_raw_radar"        default="true" />
+    <!-- tl_reckognition params -->
+    <arg name="use_tl_detection"        default="true" />
+    <arg name="rectify"                 default="false" />
+    <arg name="use_api"                 default="true"/>
+    <arg name="api_method"              default="mqtt"      doc="{http, mqtt, carla}" />
+    <arg name="api_timeout"             default="1.5"/>
+    <arg name="use_cam"                 default="true"/>
+    <arg name="cam_method"              default="astuff"    doc="{astuff, color, yolo}" />
+
+    <arg name="init_params"             default="false" />
+
+
+    <!-- Obstacle detection -->
+    <include if="$(arg use_obstacle_detection)" file="$(find autoware_ut)/launch/detection/obstacle_detection.launch" >
+        <arg name="use_lidar_center"    value="$(arg use_lidar_center)" />
+        <arg name="use_lidar_front"     value="$(arg use_lidar_front)" />
+        <arg name="tracker"             value="$(arg tracker)" />
+        <arg name="detector"            value="$(arg detector)" />
+        <arg name="use_radar"           value="$(arg use_radar)" />
+        <arg name="enable_raw_radar"    value="$(arg enable_raw_radar)" />
+    </include>
+
+    <!-- Trafficlights detection -->
+    <include if="$(eval use_tl_detection)" file="$(find autoware_ut)/launch/detection/tl_recognition.launch" >
+        <arg name="use_api"             value="$(arg use_api)" />
+        <arg name="api_method"          value="$(arg api_method)" />
+        <arg name="api_timeout"         value="$(arg api_timeout)" />
+        <arg name="rectify"             value="$(arg rectify)" />
+        <arg name="use_cam"             value="$(arg use_cam)" />
+        <arg name="cam_method"          value="$(arg cam_method)" />
+        <arg name="map_name"            value="$(arg map_name)" />
+        <arg name="use_lanelet2_map"    value="$(arg use_lanelet2_map)" />
+    </include>
+
+    <!-- launch op_perception_simulator and lidar_kf_contour_track -->
+    <include if="$(arg use_fake_obstacles)" file="$(find autoware_ut)/launch/detection/fake_obstacle.launch" />
+
+
+    <!-- Load Detection parameters -->
+    <group if="$(arg init_params)">
+        <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/detection.yaml"/>
+    </group>
+
+</launch>

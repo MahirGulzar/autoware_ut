@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_sim_mode"          default="true" />
+
+    <arg name="display_autoware_vector_map"  default="true" />
+    <arg name="map_name"              default="tartu" />
+    <arg name="waypoints_file"        default="delta_pocket_exit.csv" />
+
+    <arg name="localizer"             default="gpsins"        doc="{gpsins, ndt}" />
+    <arg name="controller"            default="mpc"           doc="{purepursuit, stanley, mpc}" />
+    <arg name="planner"               default="decisionmaker"   doc="{openplanner, decisionmaker}"/>
+
+    <arg name="use_astar_avoid"       default="true" />
+    <arg name="bypass_twist_filter"   default="false" />
+    <arg name="use_decision_maker"    default="true" />
+
+
+
+    <include unless="$(arg use_sim_mode)" file="$(find autoware_ut)/launch/platform.launch" >
+        <arg name="use_diagnostics"           value="false" />
+        <arg name="use_lidar_center"          value="false" />
+        <arg name="use_lidar_front"           value="false" />
+        <arg name="use_radar"                 value="false" />
+        <arg name="use_camera_fr"             value="false" />
+        <arg name="use_camera_fl"             value="false" />
+        <arg name="use_lexus_model"           value="true" />
+    </include>
+
+    <!-- TRANSFORMS -->
+    <include if="$(arg use_sim_mode)" file="$(find vehicle_platform)/launch/sensors/tf.launch" />
+
+
+        <!-- Sim velocity/pose relay -->
+    <include file="$(find autoware_connector)/launch/vel_pose_connect.launch">
+        <arg name="topic_pose_stamped"  value="/ndt_pose" />
+        <arg name="topic_twist_stamped" value="/estimate_twist" />
+        <arg name="sim_mode"            value="true" />
+    </include>
+
+
+    <!-- Map, used just for visual reference -->
+    <include if="$(arg display_autoware_vector_map)" file="$(find autoware_ut)/launch/map/autoware_vector_map.launch">
+        <arg name="map_name"      value="$(arg map_name)" />
+    </include>
+
+
+    <!-- Localization -->
+<!--     <include file="$(find autoware_ut)/launch/localization.launch">
+        <arg name="localizer"  value="$(arg localizer)" />
+    </include> -->
+
+
+    <!-- TODO: substitute with decisionmaker.launch ? -->
+    <group>
+        <!-- Waypoint Loader -->
+        <include file="$(find autoware_ut)/launch/map/waypoints.launch" >
+            <arg name="map_name"           value="$(arg map_name)" />
+            <arg name="waypoints_file"     value="$(arg waypoints_file)" />
+        </include>
+
+        <node pkg="waypoint_maker" type="waypoint_marker_publisher" name="waypoint_marker_publisher" />
+        <node pkg="waypoint_maker" type="waypoint_replanner" name="waypoint_replanner" output="screen" />
+        
+
+        <!-- Lane Planner -->
+        <node pkg="lane_planner" type="lane_rule" name="lane_rule" />
+        <node pkg="lane_planner" type="lane_stop" name="lane_stop" />
+        <node pkg="lane_planner" type="lane_select" name="lane_select" />
+
+        <!-- Decision Maker -->
+<!--         <include if="$(arg use_decision_maker)" file="$(find decision_maker)/launch/decision_maker.launch">
+            <arg name="ignore_map" value="true" />
+        </include> -->
+
+        <group if="$(arg use_astar_avoid)" >
+            <!-- AStar Planner -->
+            <include file="$(find waypoint_planner)/launch/astar_avoid.launch" />
+            <!-- Velocity Set (Including Obstacle Detection on Path) -->
+            <include file="$(find waypoint_planner)/launch/velocity_set.launch" />
+        </group>
+    </group>
+
+
+    <!-- TODO: substitute with control.launch -->
+    <!-- Motion planning -->
+    <include file="$(find autoware_ut)/launch/control.launch">
+        <arg name="use_sim_mode"        value="$(arg use_sim_mode)" />
+        <arg name="planner"             value="$(arg planner)" />
+        <arg name="controller"          value="$(arg controller)" />
+    </include>
+
+    <group >
+        <!-- Waypoint follower -->
+<!--         <include if="$(eval arg('controller') =='mpc')" file="$(find mpc_follower)/launch/mpc_follower.launch" >
+            <arg name="vehicle_model_wheelbase" value="2.789" />
+        </include>
+        <include if="$(eval arg('controller') =='stanley')" file="$(find stanley_controller)/launch/stanley_controller.launch" />
+        <include if="$(eval arg('controller') =='purepursuit')" file="$(find pure_pursuit)/launch/pure_pursuit.launch" />
+ -->
+        <!-- Twist Filter -->
+<!--         <include unless="$(arg bypass_twist_filter)" file="$(find twist_filter)/launch/twist_filter.launch">
+            <arg name="use_decision_maker"  value="False" />
+            <arg name="lateral_accel_limit" value="4.0" />
+        </include>
+ -->
+        <!-- Twist Filter Bypass -->
+<!--         <group if="$(arg bypass_twist_filter)">
+            <node pkg="twist_gate"  type="twist_gate"   name="twist_gate" />
+            <node pkg="topic_tools" type="relay"        name="twist_bypass" args="twist_raw twist_cmd" />
+            <node pkg="topic_tools" type="relay"        name="ctrl_bypass"  args="ctrl_raw ctrl_cmd" />
+        </group>
+ -->    
+    </group>
+
+    <!-- Load parameters -->
+    <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/decisionmaker.yaml"/>
+    <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/detection.yaml"/>
+    <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/control.yaml"/>
+
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find autoware_ut)/rviz/waypoint_following.rviz" />
+
+</launch>

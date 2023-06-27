@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find op_simulation_package)/launch/op_signs_simulator.launch" >
+    <arg name="first_signs_list_ids"        value=",42,52,62,262,252,102,112,122,292,302,362,372,382,442,452,462,192,202,472,482,532,542,522,572,32,212,592," />
+    <arg name="second_signs_list_ids"       value=",242,72,82,92,272,282,322,312,142,132,352,332,342,392,402,412,422,432,152,172,162,492,502,512,182,582,602,552,562,232,12,22,222," />
+
+    <arg name="first_green_time"            value="5" />
+    <arg name="second_green_time"           value="5" />
+
+  </include>
+</launch>

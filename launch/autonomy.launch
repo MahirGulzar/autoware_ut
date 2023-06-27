@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- General setup -->
+    <arg name="platform"                default="lexus"         doc="{lexus, sim_mode, svl_sim, carla_sim}"/>
+    <arg name="planner"                 default="openplanner"   doc="{openplanner, decisionmaker}"/>
+    <arg name="controller"              default="mpc"           doc="{purepursuit, stanley, mpc}" />
+    <arg name="localizer"               default="gpsins"        doc="{gpsins, ndt, carla}" />
+    <arg name="use_sim_mode"            default="true" />
+    <!-- Maps and planning -->
+    <arg name="maxVelocity"             default="40.0" />
+    <arg name="use_autoware_vector_map" default="true" />
+    <arg name="use_lanelet2_map"        default="false" />
+    <arg name="map_name"                default="tartu" />                <!-- autoware vector map name, map itself is in 'maps/(arg map_name)/vector_map/' -->
+    <arg name="lanelet2_map"            default="$(arg map_name).osm" />  <!-- should be in 'maps/(arg map_name)/lanelet2/ -->
+    <arg name="pointcloud_map"          default="$(arg map_name).pcd" />  <!-- should be in 'maps/(arg map_name)/pointcloud_map/' -->
+    <arg name="waypoints_file"          default="raadi_oscil_gps_30_straight_from_entrance.csv" /> <!-- should be in 'maps/(arg map_name)/paths/' -->
+    <arg name="use_pointcloud_map"      default="true" />
+    <arg name="use_waypoints"           default="true" />
+    <arg name="enableRvizInput"         default="false" />
+    <!-- Platform and sensors -->
+    <arg name="use_lidar_center"        default="true" />
+    <arg name="use_lidar_front"         default="true" />
+    <arg name="use_radar"               default="true" />
+    <arg name="enable_raw_radar"        default="true" />
+    <!-- Detection -->
+    <arg name="use_fake_obstacles"      default="false" />
+    <arg name="use_obstacle_detection"  default="true" />
+    <arg name="tracker"                 default="imm_ukf"   doc="{imm_ukf, cvkf}" />
+    <arg name="detector"                default="clustering" doc="{clustering, pointpillars, carla}" />
+    <arg name="use_tl_detection"        default="true" />       <!-- traffic light detection -->
+    <arg name="rectify"                 default="false" />
+    <arg name="use_api"                 default="true"/>
+    <arg name="api_method"              default="mqtt"      doc="{http, mqtt, carla}" />
+    <arg name="api_timeout"             default="1.5"/>
+    <arg name="use_cam"                 default="true"/>
+    <arg name="cam_method"              default="astuff"    doc="{astuff, color, yolo}" />
+    <!-- Nodes -->
+    <arg name="use_indicators"              default="true" />
+    <arg name="use_webapp"                  default="false" />
+    <arg name="use_modern_mobility_api"     default="false" />
+    <arg name="use_modern_mobility_live"    default="false" />
+
+
+    <!-- Load map -->
+    <include file="$(find autoware_ut)/launch/map.launch">
+        <arg name="use_autoware_vector_map" value="$(arg use_autoware_vector_map)" />
+        <arg name="use_lanelet2_map"        value="$(arg use_lanelet2_map)" />
+        <arg name="map_name"                value="$(arg map_name)" />
+        <arg name="lanelet2_map"            value="$(arg lanelet2_map)" />
+        <arg name="pointcloud_map"          value="$(arg pointcloud_map)" />
+        <arg name="waypoints_file"          value="$(arg waypoints_file)" />
+        <arg name="use_pointcloud_map"      value="$(arg use_pointcloud_map)" />
+        <arg name="use_waypoints"           value="$(arg use_waypoints)" />
+    </include>
+
+    <!-- Localization, not included in sim_mode and if localizer is of type 'carla' -->
+    <include unless="$(eval (arg('platform') =='sim_mode'))" file="$(find autoware_ut)/launch/localization.launch">
+        <arg name="platform"   value="$(arg platform)" />
+        <arg name="localizer"  value="$(arg localizer)" />
+        <arg name="dual_lidar" value="$(eval arg('use_lidar_center') and arg('use_lidar_front'))" />
+    </include>
+
+    <!-- Mission planning -->
+    <include file="$(find autoware_ut)/launch/planning.launch">
+        <arg name="use_sim_mode"            value="$(arg use_sim_mode)" />
+        <arg name="planner"                 value="$(arg planner)" />
+        <arg name="maxVelocity"             value="$(arg maxVelocity)" />
+        <arg name="enableRvizInput"         value="$(arg enableRvizInput)" />
+        <arg name="use_autoware_vector_map" value="$(arg use_autoware_vector_map)" />
+        <arg name="use_lanelet2_map"        value="$(arg use_lanelet2_map)" />
+        <arg name="use_waypoints"           value="$(arg use_waypoints)" />
+    </include>
+
+    <!-- Motion planning -->
+    <include file="$(find autoware_ut)/launch/control.launch">
+        <arg name="use_sim_mode"        value="$(arg use_sim_mode)" />
+        <arg name="planner"             value="$(arg planner)" />
+        <arg name="controller"          value="$(arg controller)" />
+        <arg name="use_indicators"      value="$(arg use_indicators)" />
+    </include>
+
+    <!-- Detection -->
+    <include file="$(find autoware_ut)/launch/detection.launch">
+        <arg name="map_name"                value="$(arg map_name)" />
+        <arg name="use_lanelet2_map"        value="$(arg use_lanelet2_map)" />
+        <arg name="use_fake_obstacles"      value="$(arg use_fake_obstacles)" />
+        <arg name="use_obstacle_detection"  value="$(arg use_obstacle_detection)" />
+        <arg name="use_lidar_center"        value="$(arg use_lidar_center)" />
+        <arg name="use_lidar_front"         value="$(arg use_lidar_front)" />
+        <arg name="tracker"                 value="$(arg tracker)" />
+        <arg name="detector"                value="$(arg detector)" />
+        <arg name="use_radar"               value="$(arg use_radar)" />
+        <arg name="enable_raw_radar"        value="$(arg enable_raw_radar)" />
+        <arg name="use_tl_detection"        value="$(arg use_tl_detection)" />
+        <arg name="rectify"                 value="$(arg rectify)" />
+        <arg name="use_api"                 value="$(arg use_api)" />
+        <arg name="api_method"              value="$(arg api_method)" />
+        <arg name="api_timeout"             value="$(arg api_timeout)" />
+        <arg name="use_cam"                 value="$(arg use_cam)" />
+        <arg name="cam_method"              value="$(arg cam_method)" />
+    </include>
+
+    <!-- Nodes -->
+    <include file="$(find autoware_ut)/launch/nodes.launch">
+        <arg name="planner"                     value="$(arg planner)" />
+        <arg name="map_name"                    value="$(arg map_name)" />
+        <arg name="use_webapp"                  value="$(arg use_webapp)" />
+        <arg name="use_modern_mobility_api"     value="$(arg use_modern_mobility_api)" />
+        <arg name="use_modern_mobility_live"    value="$(arg use_modern_mobility_live)" />
+    </include>
+
+    <!-- Load parameters -->
+    <include file="$(find autoware_ut)/launch/parameters.launch">
+        <arg name="planner"                 value="$(arg planner)" />
+        <arg name="use_sim_mode"            value="$(arg use_sim_mode)" />
+        <arg name="use_obstacle_detection"  value="$(arg use_obstacle_detection)" />
+        <arg name="use_tl_detection"        value="$(arg use_tl_detection)" />
+    </include>
+
+</launch>

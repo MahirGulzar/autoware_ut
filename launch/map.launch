@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_autoware_vector_map" default="false" />
+    <arg name="use_lanelet2_map"        default="false" />
+    <arg name="map_name"                default="tartu" />     <!-- used as map name for csv maps -->
+    <arg name="lanelet2_map"            default="tartu.osm" />
+    <!-- Params not in autonomy.launch -->
+    <arg name="use_pointcloud_map"      default="false" />
+    <arg name="use_waypoints"           default="false" />
+    <arg name="pointcloud_map"          default="map_20cm_.pcd" />
+    <arg name="waypoints_file"          default="raadi_oscil_gps_30_straight_from_entrance.csv" />
+
+
+    <!-- Load Autoware vector map -->
+    <include if="$(arg use_autoware_vector_map)" file="$(find autoware_ut)/launch/map/autoware_vector_map.launch">
+        <arg name="map_name"      value="$(arg map_name)" />
+    </include>
+
+    <!-- Load Lanelet2 map -->
+    <include if="$(arg use_lanelet2_map)" file="$(find autoware_ut)/launch/map/lanelet2_map.launch">
+        <arg name="map_name"      value="$(arg map_name)" />
+        <arg name="lanelet2_map"    value="$(arg lanelet2_map)" />
+    </include>
+
+    <!-- TODO? Should create a separate launch file? as with others?  -->
+    <!-- Load Point Cloud Map -->
+    <include if="$(arg use_pointcloud_map)" file="$(find autoware_ut)/launch/map/pointcloud_map.launch">
+        <arg name="map_name"      value="$(arg map_name)" />
+        <arg name="pointcloud_map"  value="$(arg pointcloud_map)" />
+    </include>
+
+    <!-- Load waypoint file -->
+    <include if="$(arg use_waypoints)" file="$(find autoware_ut)/launch/map/waypoints.launch">
+        <arg name="map_name"      value="$(arg map_name)" />
+        <arg name="waypoints_file"  value="$(arg waypoints_file)" />
+    </include>
+
+</launch>

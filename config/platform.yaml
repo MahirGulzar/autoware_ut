@@ -1,0 +1,43 @@
+# This file contains parameters that are platform-specific
+# If a param with the same value is used in more that 2 packages is has to be here.
+
+.config_params:
+  - &lidar_center_frame lidar_center
+  - &width 1.90
+  - &length 4.89
+  - &wheel_base 2.789
+  - &turningRadius 11.83
+  - &center_lidar_height 2.23 # I think this params needs to be changed to 1.78
+  - &front_lidar_height 1.439
+
+# TODO: Resolve code duplication, this information is already in the base_link -> velodyne TF
+tf_x: 1.02
+tf_y: 0.0
+tf_z: *center_lidar_height
+tf_yaw: -0.021
+tf_pitch: 0.0
+tf_roll: 0.0
+
+# The wheelbase of the vehicle (meters)
+vehicle_info:
+  wheel_base: *wheel_base
+
+# Not used?
+naive_motion_predict:
+  sensor_height: *center_lidar_height
+
+op_common_params:
+  wheelBaseLength: *wheel_base
+  width: *width
+  length: *length
+  turningRadius: *turningRadius
+
+mpc_follower:
+  vehicle_model_wheelbase: *wheel_base
+  vehicle_model_steer_tau: 0.6
+  steer_lim_deg: 40.0
+  steering_gear_ratio: 20.0
+
+lidar_kf_contour_track:
+  vehicle_length: *length
+  vehicle_width: *width

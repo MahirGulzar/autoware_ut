@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="path" doc="Absolute path to the bag"/>
+    <arg name="decompress" default="True" doc="Bool, decompress the image"/>
+
+    <include if="$(arg decompress)" file="$(find autoware_ut)/launch/tools/decompress_image.launch" />
+    <node pkg="rosbag" type="play" name="player" output="screen" args="--clock --pause $(arg path)"/>
+</launch>

@@ -1,0 +1,11 @@
+analyzers:
+  lidars:
+    type: diagnostic_aggregator/AnalyzerGroup
+    path: Lidars
+    analyzers:
+      lidar_center:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: lidar_center
+        find_and_remove_prefix: 'lidar_center/lidar_center_nodelet_manager_driver: velodyne_packets '
+        num_items: 1
+        timeout: 2

@@ -1,0 +1,11 @@
+analyzers:
+  tfl_detection:
+    type: diagnostic_aggregator/AnalyzerGroup
+    path: tfl_detection
+    analyzers:
+      camera_fl:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Status
+        startswith: 'ib_tls'
+        num_items: 1
+        timeout: 2

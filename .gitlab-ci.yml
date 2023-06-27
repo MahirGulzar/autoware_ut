@@ -1,0 +1,22 @@
+stages:
+  - ut_aw_pkgs_build
+
+image: registry.hpc.ut.ee/mirror/library/docker:18.09.7-dind
+
+# WORKAROUND TO: https://forum.gitlab.com/t/docker-dind-stops-working-after-12-1-0-update/28664/4
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  # See https://github.com/docker-library/docker/pull/166
+  DOCKER_TLS_CERTDIR: ""
+
+# Stages
+
+ut_aw_pkgs_build:
+  stage: ut_aw_pkgs_build
+  services:
+    - name: docker:dind
+      entrypoint: [ "env", "-u", "DOCKER_HOST" ]
+      command: [ "dockerd-entrypoint.sh" ]
+  script:
+    - cd .ci && ./build.bash

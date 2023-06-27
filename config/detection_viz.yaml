@@ -1,0 +1,12 @@
+detection:
+  lidar:
+    lidar_euclidean_cluster_detect:
+      cluster_size_max: 100
+      cluster_size_min: 5
+      output_frame: base_link
+      points_node: /lidar_center/points_no_ground
+
+imm_ukf_pda_track:
+  map_frame: base_link
+  tracking_frame: base_link
+

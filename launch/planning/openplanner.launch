@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="maxVelocity"             default="40.0" />
+    <arg name="enableRvizInput"         default="false" />
+    
+    <arg name="use_waypoints"           default="false" />
+    <arg name="replanning_mode"         default="true" />     <!-- Whether to replan the waypoints' velocity in the received raw lane array. -->
+    <arg name="replan_endpoint_mode"    default="false" />
+    <arg name="replan_curve_mode"       default="true" />     <!-- Replan velocity in curves depending on curvature -->
+    <arg name="use_decision_maker"      default="false" />    <!-- false: will publish to /lane_waypoints_array true: /based/lane_waypoints_array -->
+
+
+    <arg name="init_params"             default="false" />
+
+
+    <!-- ========= Openplanner Global planning ========= -->
+    <include unless="$(arg use_waypoints)" file="$(find op_global_planner)/launch/op_global_planner.launch">
+        <arg name="enableRvizInput"         value="$(arg enableRvizInput)" />
+    </include>
+
+    <!-- Waypoint replanner, ued with waypoints -->
+    <node if="$(arg use_waypoints)" pkg="waypoint_maker" type="waypoint_replanner" name="waypoint_replanner" output="screen">
+        <!-- Wether to set speed of the beginnig waypoint of lane to velocity_min and its end waypoint to zero. -->
+        <param name="replanning_mode"           value="$(arg replanning_mode)" />
+        <param name="replan_endpoint_mode"      value="$(arg replan_endpoint_mode)" />
+        <param name="replan_curve_mode"         value="$(arg replan_curve_mode)" />
+        <param name="use_decision_maker"        value="$(arg use_decision_maker)" />
+        <param name="velocity_max"              value="$(arg maxVelocity)"  />
+    </node>
+
+    <!-- ========= Openplanner Local planning ========= -->
+    <!-- Common params -->
+    <include file="$(find op_local_planner)/launch/op_common_params.launch">
+        <arg name="maxVelocity"                 value="$(eval arg('maxVelocity') / 3.6)" />
+    </include>
+
+    <!-- Trajectory generator - Generating candidate rollout trajs from global path -->
+    <include file="$(find op_local_planner)/launch/op_trajectory_generator.launch" />
+
+    <!-- Motion predictor - Predicts behaviour and trajs for moving vehicles -->
+    <include file="$(find op_local_planner)/launch/op_motion_predictor.launch" />
+
+    <!-- Traj evaluator - Evaluate rollout trajs against tracked obstacles -->
+    <include file="$(find op_local_planner)/launch/op_trajectory_evaluator.launch" />
+
+    <!-- Behaviour selector - Decision making by selecting best behaviour for local planner -->
+    <include file="$(find op_local_planner)/launch/op_behavior_selector.launch" />
+
+
+    <!-- ========= Load Oenplanner  parameters ========= -->
+    <group if="$(arg init_params)">
+        <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/openplanner.yaml"/>
+    </group>
+
+</launch>

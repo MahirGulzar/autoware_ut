@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="platform"        default="lexus"     doc="{lexus, sim_mode, svl_sim}"/>
+    <arg name="localizer"       default="gpsins"    doc="{gpsins, ndt}" />
+    <!-- Params not in autonomy.launch -->
+    <arg name="dual_lidar"      default="true" />
+
+    <arg name="init_params"     default="false" />
+
+
+    <include if="$(eval arg('localizer')=='ndt')" file="$(find autoware_ut)/launch/localization/ndt.launch" >
+        <arg name="dual_lidar" value="$(arg dual_lidar)" />
+    </include>
+
+    <include if="$(eval arg('localizer')=='gpsins')" file="$(find autoware_ut)/launch/localization/gpsins.launch" >
+        <arg name="platform" value="$(arg platform)" />
+    </include>
+
+
+    <!-- Load Localization parameters -->
+    <group if="$(arg init_params)">
+        <rosparam command="load" subst_value="true" file="$(find autoware_ut)/config/localization.yaml"/>
+    </group>
+
+</launch>

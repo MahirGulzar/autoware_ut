@@ -1,0 +1,10 @@
+analyzers:
+  GPS:
+    type: diagnostic_aggregator/AnalyzerGroup
+    analyzers:
+      novatel:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: GPS
+        find_and_remove_prefix: 'novatel/oem7/driver_diag:'
+        num_items: 1
+        timeout: 2

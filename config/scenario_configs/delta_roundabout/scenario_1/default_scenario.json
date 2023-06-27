@@ -1,0 +1,20 @@
+{
+    "obstacles": [
+        {
+            "file": "0.csv",
+            "replan": true,
+            "initial_delay": 6
+        }
+    ],
+    "map_offset_configurations": {
+        "origin_xy": [
+            9406.11,
+            10004.56
+        ],
+        "offset_xy": [
+            1529,
+            1284
+        ],
+        "yaw_rotation": 1.91986
+    }
+}

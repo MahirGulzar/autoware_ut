@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="enableRvizPoseSelect"    default="false" doc="If false will get the car config file from logFolder"/>
+    <arg name="maxVelocity"             default="3.0" />
+    <arg name="maxAcceleration"         default="3.0" />
+    <arg name="maxDeceleration"         default="-3.0" />
+    <arg name="carSelect"               default="1" doc="Car selection, between 1 and 5"/>
+    <arg name="map_name"                default="tartu_demo_route" />
+    <arg name="logFolder"               default="$(find autoware_ut)/maps/$(arg map_name)/SimulationData/"/>
+
+    <!-- Car simulator -->
+    <include file="$(find op_simulation_package)/launch/op_car_simulator_$(arg carSelect).launch">
+        <arg name="enableRvizPoseSelect"        value="$(arg enableRvizPoseSelect)" />
+        <arg name="enableLooper"                value="True" />
+        <arg name="logFolder"                   value="$(arg logFolder)" />
+        <arg name="enableCurbObstacles"         value="False" />
+        <arg name="enableFollowing"             value="False" />
+        <arg name="enableSwerving"              value="False" />
+        <arg name="pathDensity"                 value="0.5" />
+        <arg name="maxVelocity"                 value="$(arg maxVelocity)" />
+        <arg name="maxAcceleration"             value="$(arg maxAcceleration)" />
+        <arg name="maxDeceleration"             value="$(arg maxDeceleration)" />
+        <arg name="maxLocalPlanDistance"        value="60" />
+        <arg name="samplingTipMargin"           value="4" />
+        <arg name="samplingOutMargin"           value="12" />
+        <arg name="rollOutDensity"              value="0.5" />
+        <arg name="rollOutsNumber"              value="0" />
+        <arg name="minFollowingDistance"        value="30" />
+        <arg name="minDistanceToAvoid"          value="15" />
+        <arg name="maxDistanceToAvoid"          value="4" />
+        <arg name="enableStopSignBehavior"      value="true" />
+        <arg name="enableTrafficLightBehavior"  value="true" />
+        <arg name="enableLaneChange"            value="False" />
+        <arg name="horizontalSafetyDistance"    value="0.5" />
+        <arg name="verticalSafetyDistance"      value="0.5" />
+        <arg name="enableStepByStepSignal"      value="False" />
+        <arg name="enableSimulatedVelodyne"     value="False" />
+    </include>
+
+</launch>

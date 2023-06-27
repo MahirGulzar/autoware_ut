@@ -1,0 +1,37 @@
+
+gpsins_localizer:
+  # broadcast_tfs set in localization.launch
+  #broadcast_tfs: true
+  imu_data_topic_name: gps/imu
+  ins_data_topic_name: gps/inspva
+  publish_earth_gpsm_tf: false
+  create_map_frame: true
+  measured_gps_frame: gps_measured
+  static_gps_frame: imu
+  no_solution_init: false
+  msl_height: true
+  # if previous set to false use this height,
+  # in order to work would need to checkout changes for gpsins_localizer
+  # that are currently in branch: core_perception/gpsins_height
+  if_msl_height_false_use: 0.5
+  coordinate_system: lest97_tartu
+
+# Param used in lidar_localizer, not included in launch files
+localizer: lidar_center
+
+ndt_matching:
+  # pcl_generic=0, pcl_anh=1, pcl_anh_gpu=2, pcl_openmp=3 -->
+  method_type: 2
+  use_gnss: 1
+  # value of 500 might need lowering.
+  gnss_reinit_fitness: 50.0
+  # default false
+  use_odom: false
+  # default false and originally topic was "/imu_raw"
+  use_imu: true
+  imu_topic: /gps/imu
+  sync: false
+  # default false will be in folder "/tmp/Autoware/log/ndt_matching"
+  output_log_data: true
+  get_height: false
+  use_local_transform: false

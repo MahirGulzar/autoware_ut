@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="dual_lidar"              default="true" />
+
+    <!-- ndt_matching -->
+    <remap if="$(arg dual_lidar)" from="/points_raw" to="/points_raw_center" />
+    <!-- points downsampler -->
+    <!-- This is called Voxel Grid Filter on the Autoware GUI under Sensing Tab -->
+    <include file="$(find points_downsampler)/launch/points_downsample.launch" />
+
+    <!-- gpsins_localizer - necessary for ndt initialization -->
+    <node pkg="gpsins_localizer" type="gpsins_localizer_node" name="gpsins_localizer_lidar" output="screen">
+        <remap from="/current_pose" to="/gnss_pose" />
+        <param name="broadcast_tfs" type="bool" value="false" />
+    </node>
+
+    <!-- ndt matching -->
+    <include file="$(find lidar_localizer)/launch/ndt_matching.launch" />
+
+    <!-- ekf localizer -->
+    <!--include file="$(find ekf_localizer)/launch/ekf_localizer.launch">
+    <arg name="input_pose_name" value="/ndt_pose" />
+    <arg name="input_twist_name" value="/vehicle/twist" />
+    </include-->
+
+    <!-- vel_pose_mux -->
+    <include file="$(find autoware_connector)/launch/vel_pose_connect.launch">
+        <arg name="topic_pose_stamped" value="/ndt_pose" />
+        <arg name="topic_twist_stamped" value="/vehicle/twist" />
+    </include>
+
+</launch>

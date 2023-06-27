@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Select sensors to include -->
+    <arg name="use_lidar_front"           default="false" />
+    <arg name="use_lidar_front_image"     default="false" />
+    <arg name="range_img_max"             default="50.0" />
+    <arg name="use_lidar_center"          default="false" />
+    <arg name="use_camera_fl"             default="false" />
+    <arg name="use_camera_fr"             default="false" />
+    <arg name="acquisition_rate"          default="2" />                     <!-- MAKO -->
+    <arg name="use_radar"                 default="false" />
+    <arg name="use_nvidia_cameras"        default="false" />
+    <arg name="framerate"                 default="2" />                     <!-- NVIDIA -->
+    <arg name="encoder"                   default="jpg" doc="{jpg, h264}"/>  <!-- NVIDIA -->
+
+    <arg name="localizer"                 default="gpsins"    doc="{gpsins, ndt}" />
+    <arg name="use_gnss"                  default="true" />
+
+    <arg name="use_dbw"                   default="false" />
+    <arg name="use_ssc"                   default="false" />
+    <arg name="use_tf"                    default="true" />
+
+    <arg name="use_vector_map"            default="true" />
+    <arg name="map_name"                  default="tiksoja" />
+
+
+    <!-- Vehicle sensors -->
+    <include file="$(find vehicle_platform)/launch/platform.launch">
+    <!-- Args go here to turn on the sensors we want -->
+    <arg name="lidar_min_dist"         value="2.8" />
+    <arg name="lidar_front_min_dist"   value="2.2" />
+    <arg name="use_camera_fr"          value="$(arg use_camera_fr)" />
+    <arg name="use_camera_fl"          value="$(arg use_camera_fl)" />
+    <arg name="acquisition_rate"       value="$(arg acquisition_rate)" />
+    <arg name="use_gnss"               value="$(arg use_gnss)" />
+    <arg name="use_dbw"                value="$(arg use_dbw)" />
+    <arg name="use_ssc"                value="$(arg use_ssc)" />
+    <arg name="use_tf"                 value="$(arg use_tf)" />
+    <arg name="use_lidar_front"        value="$(arg use_lidar_center)" />
+    <arg name="use_lidar_front_image"  value="$(arg use_lidar_center_image)" />
+    <arg name="use_lidar_center"       value="$(arg use_lidar_front)" />
+    <arg name="use_radar_fc"           value="$(arg use_radar)" />
+    <arg name="range_img_max"          value="$(arg range_img_max)" /> 
+    </include>
+
+    <!-- Nvidia cameras -->
+    <!-- ROS_MASTER_URI=http://192.168.60.100:11311 roslaunch vehicle_platform nvidia_cameras.launch -->
+    <include if="$(arg use_nvidia_cameras)" file="$(find vehicle_platform)/launch/nvidia_cameras.launch" >
+        <arg name="framerate" value="$(arg framerate)" />
+    </include>
+
+    <!-- Localization -->
+    <include file="$(find autoware_ut)/launch/localization.launch">
+        <arg name="localizer" value="$(arg localizer)" />
+    </include>
+
+    <!-- Map -->
+    <include file="$(find autoware_ut)/launch/map.launch">
+        <arg name="use_vector_map" value="$(arg use_vector_map)" />
+        <arg name="map_name" value="$(arg map_name)" />
+    </include>
+
+    <!-- Waypoint Collection -->
+    <!-- When complete, kill the `record_waypoints.lauch` launch file and copy the waypoint file from `/tmp/saved_waypoints.csv` to a safe location -->
+    <!--  <node pkg="waypoint_maker" type="waypoint_saver" name="waypoint_saver" output="screen">
+    <param name="interval" value="1" />
+    <param name="velocity_topic" value="current_velocity" />
+    <param name="pose_topic" value="current_pose" />
+    <param name="save_velocity" value="true" />
+    </node> -->
+
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find autoware_ut)/rviz/mapping_data_collection.rviz" />
+
+    <!-- System parameters -->
+    <include file="$(find autoware_ut)/launch/parameters.launch" />
+
+</launch>

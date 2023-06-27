@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="use_lidar_center"        default="true" />
+    <arg name="use_lidar_front"         default="true" />
+    <arg name="tracker"                 default="imm_ukf" doc="{imm_ukf, cvkf}" />
+    <arg name="use_radar"               default="false" />
+    <arg name="enable_raw_radar"        default="true" />
+    <arg name="detector"                default="clustering" doc="{clustering, pointpillars}" />
+
+    <!-- Lidar(s) -->
+    <group if="$(eval (use_lidar_center or use_lidar_front) and (arg('detector')=='clustering'))">
+        <!-- Center lidar ground removal -->
+        <group if="$(arg use_lidar_center)" ns="lidar_center">
+            <remap unless="$(arg use_lidar_front)" from="points_no_ground" to="/detection/lidar/points_no_ground" />
+            <node pkg="points_preprocessor" type="ray_ground_filter" name="ray_ground_filter" output="log" />
+        </group>
+
+        <!-- Front lidar ground removal -->
+        <group if="$(arg use_lidar_front)" ns="lidar_front">
+            <remap unless="$(arg use_lidar_center)" from="points_no_ground" to="/detection/lidar/points_no_ground" />
+            <node pkg="points_preprocessor" type="ray_ground_filter" name="ray_ground_filter" output="log" />
+        </group>
+    </group>
+
+    <group ns="detection">
+        <group if="$(eval use_lidar_center or use_lidar_front)" ns="lidar">
+            <group if="$(eval arg('detector')=='clustering')">
+
+                <!-- Lidar merging node -->
+                <node if="$(eval use_lidar_center and use_lidar_front)" pkg="points_preprocessor" type="points_concat_filter" name="points_concat_filter" output="screen">
+                    <remap from="/points_concat" to="points_no_ground" />
+                </node>
+
+                <!-- Clustering -->
+                <remap from="/detection/lidar_detector/cloud_clusters" to="cloud_clusters" />
+                <remap from="/detection/lidar_detector/objects" to="objects" />
+                <remap from="/points_cluster" to="points_cluster" />
+                <remap from="/points_lanes" to="points_lanes" />
+                <remap from="/points_ground" to="points_ground" />
+                <remap from="/cluster_centroids" to="cluster_centroids" />
+                <node pkg="lidar_euclidean_cluster_detect" type="lidar_euclidean_cluster_detect" name="lidar_euclidean_cluster_detect" output="screen"></node>
+            </group>
+
+            <!-- Autoware PoinPillars-->
+            <group if="$(eval arg('detector')=='pointpillars' and use_lidar_center)">
+                <include file="$(find autoware_ut)/launch/detection/pointpillars.launch">
+                    <arg name="input_topic" default="/lidar_center/points_raw" />
+                    <arg name="output_topic" default="objects" />
+                </include>
+            </group>
+
+            <!-- Tracker IMM_UKF or CVKF -->
+            <include file="$(find autoware_ut)/launch/detection/tracking.launch">
+                <arg name="namespace" value="lidar" />
+                <arg name="tracker" value="$(arg tracker)" />
+                <arg name="tracker_input_topic" value="objects" />
+                <arg if="$(arg use_radar)" name="tracker_output_topic" value="tracked_objects" />
+                <arg unless="$(arg use_radar)" name="tracker_output_topic" value="/detection/objects" />
+            </include>
+
+        </group>
+
+        <group if="$(arg use_radar)" ns="radar">
+            <!-- Radar relay node              -->
+            <node pkg="autoware_ut" type="radar_relay.py" name="radar_relay" output="screen" >
+                <remap if="$(eval (not use_lidar_center) and (not use_lidar_front) and (not enable_raw_radar))" from="objects" to="/detection/objects" />
+            </node>
+
+            <!-- Radar tracking -->
+            <include if="$(arg enable_raw_radar)" file="$(find autoware_ut)/launch/detection/tracking.launch" >
+                <arg name="namespace" value="radar" />
+                <arg name="tracker" value="$(arg tracker)" />
+                <arg name="tracker_input_topic" value="objects" />
+                <arg if="$(eval (not use_lidar_center) and (not use_lidar_front))" name="tracker_output_topic" value="/detection/objects" />
+                <arg if="$(eval (use_lidar_center) or (use_lidar_front))" name="tracker_output_topic" value="tracked_objects" />
+            </include>
+        </group>
+
+        <!-- Radar - Lidar object fusion -->
+        <node if="$(eval use_radar and (use_lidar_center or use_lidar_front))" pkg="autoware_ut" type="lidar_radar_fusion.py" name="lidar_radar_fusion" output="screen" />
+    </group>
+</launch>

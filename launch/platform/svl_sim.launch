@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="planner"                 default="decisionmaker"   doc="{openplanner, decisionmaker}"/>
+    <arg name="use_lexus_model"         default="true" />
+
+    <arg name="use_uncompressed_images" default="true" />
+    <arg name="use_radar" default="true" />
+
+    <!-- ROS-Bridge node for Simulator connection -->
+    <node name="websocket_bridge" pkg="rosbridge_server" type="rosbridge_websocket" output="screen" clear_params="true" required="true" />
+
+    <!-- Vehicle status publisher -->
+    <node pkg="autoware_ut" type="sim_veh_status_publisher.py" name="sim_vehicle_status_publisher"/>
+
+    <!-- Camera info publisher -->
+    <node pkg="autoware_ut" type="sim_camera_info_publisher.py" name="sim_camera_info_publisher_left" />
+    <node pkg="autoware_ut" type="sim_camera_info_publisher.py" name="sim_camera_info_publisher_right" />
+
+    <!-- Camera uncompress -->
+    <group if="$(arg use_uncompressed_images)">
+        <node pkg="image_transport" type="republish" name="camera_fl_uncompress" args="compressed">
+            <remap from="in" to="/camera_fl/image" />
+            <remap from="out" to="/camera_fl/image_raw" />
+        </node>
+        <node pkg="image_transport" type="republish" name="camera_fr_uncompress" args="compressed">
+            <remap from="in" to="/camera_fr/image" />
+            <remap from="out" to="/camera_fr/image_raw" />
+        </node>
+    </group>
+
+    <!-- TFs -->
+    <include file="$(find vehicle_platform)/launch/sensors/tf.launch" />
+
+</launch>

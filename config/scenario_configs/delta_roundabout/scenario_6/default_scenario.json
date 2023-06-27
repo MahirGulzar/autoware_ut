@@ -1,0 +1,63 @@
+{
+    "obstacles": [
+        {
+            "file": "0.csv",
+            "replan": true,
+            "initial_delay": 2,
+            "velocity": 20
+        },
+        {
+            "file": "1.csv",
+            "replan": true,
+            "initial_delay": 8,
+            "velocity": 20
+        },
+        {
+            "file": "2.csv",
+            "replan": true,
+            "initial_delay": 0,
+            "stop_time": 10,
+            "velocity": 20
+        },
+        {
+            "file": "3.csv",
+            "replan": true,
+            "initial_delay": 3,
+            "velocity": 20
+        },
+        {
+            "file": "4.csv",
+            "replan": true,
+            "initial_delay": 10,
+            "velocity": 20
+        },
+        {
+            "file": "5.csv",
+            "replan": true,
+            "initial_delay": 10,
+            "velocity": 20
+        }
+    ],
+    "map_offset_configurations": {
+        "origin_xy": [
+            9406.11,
+            10004.56
+        ],
+        "offset_xy": [
+            1529,
+            1284
+        ],
+        "yaw_rotation": 1.91986
+    },
+    "map_offset_configurations_ts_yielding-2": {
+        "origin_xy": [
+            9421.747,
+            10036.34
+        ],
+        "offset_xy": [
+            0,
+            0
+        ],
+        "yaw_rotation": 0
+    }
+}

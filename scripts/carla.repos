@@ -1,0 +1,17 @@
+repositories:
+  carla_ros_bridge:
+    type: git
+    url: git@gitlab.cs.ut.ee:autonomous-driving-lab/simulations/carla_ros_bridge.git
+    version: master
+  carla_autoware_bridge:
+    type: git
+    url: git@gitlab.cs.ut.ee:autonomous-driving-lab/simulations/carla_autoware_bridge.git
+    version: master
+  geometry2:
+    type: git
+    url: https://github.com/ros/geometry2.git
+    version: 0.6.5
+  cv_bridge:
+    type: git
+    url: https://github.com/ros-perception/vision_opencv.git
+    version: noetic

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="use_diagnostics"         default="true" />
+    <arg name="use_engage_button"       default="true" />
+    <arg name="use_button_panel"        default="true" />
+    <arg name="use_lidar_center"        default="true" />
+    <arg name="use_lidar_front"         default="true" />
+    <arg name="use_lidar_front_image"   default="false" />
+    <arg name="range_img_max"           default="50.0" />  <!-- Front lidar img -->
+    <arg name="use_radar"               default="true" />
+    <arg name="enable_raw_radar"        default="true" />
+    <arg name="use_camera_fr"           default="true" />
+    <arg name="use_camera_fl"           default="true" />
+    <arg name="use_nvidia_cameras"      default="false" />
+    <arg name="rectify"                 default="false" />
+    <arg name="use_gnss"                default="true" />
+    <arg name="use_dbw"                 default="true" />
+    <arg name="use_ssc"                 default="true" />
+    <arg name="use_tf"                  default="true" />
+    <arg name="use_lexus_model"         default="true" />
+
+
+    <!-- Vehicle sensors -->
+    <include file="$(find vehicle_platform)/launch/platform.launch">
+        <arg name="use_lidar_center"        value="$(arg use_lidar_center)" />
+        <arg name="use_lidar_front"         value="$(arg use_lidar_front)" />
+        <arg name="use_lidar_front_image"   value="$(arg use_lidar_front_image)" />
+        <arg name="range_img_max"           value="$(arg range_img_max)" />
+        <arg name="use_camera_fl"           value="$(arg use_camera_fl)" />
+        <arg name="use_camera_fr"           value="$(arg use_camera_fr)" />
+        <arg name="use_nvidia_cameras"      value="$(arg use_nvidia_cameras)" />
+        <arg name="rectify"                 value="$(arg rectify)" />
+        <arg name="use_radar_fc"            value="$(arg use_radar)" />
+        <arg name="enable_raw_radar"        value="$(arg enable_raw_radar)" />
+        <arg name="use_gnss"                value="$(arg use_gnss)" />
+        <arg name="use_dbw"                 value="$(arg use_dbw)" />
+        <arg name="use_ssc"                 value="$(arg use_ssc)" />
+        <arg name="use_tf"                  value="$(arg use_tf)" />
+        <arg name="use_lexus_model"         value="$(arg use_lexus_model)" />
+    </include>
+
+    <!-- Use Diagnostics -->
+    <include if="$(arg use_diagnostics)" file="$(find autoware_ut)/launch/nodes/diagnostics.launch">
+        <arg name="use_lidar_center"    value="$(arg use_lidar_center)" />
+        <arg name="use_lidar_front"     value="$(arg use_lidar_front)" />
+        <arg name="use_camera_fr"       value="$(arg use_camera_fr)" />
+        <arg name="use_camera_fl"       value="$(arg use_camera_fl)" />
+        <arg name="use_gnss"            value="$(arg use_gnss)" />
+    </include>
+
+    <!-- Autoware needs the "velodyne" frame -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="lidar_rename" args="0 0 0 0 0 0 lidar_center velodyne"/>
+
+    <!-- Vehicle control interface with Autoware, it connects autoware to the AS ssc -->
+    <include file="$(find as)/launch/ssc_interface.launch" />
+
+    <!-- Engage Button -->
+    <node if="$(arg use_engage_button)" pkg="autoware_ut" type="btn_engage.py" name="btn_engage" output="screen" />
+
+    <!-- Button Panel (replaces Engage Button)-->
+    <group if="$(arg use_button_panel)">
+        <node pkg="joy" type="joy_node" name="joy" />
+        <node pkg="autoware_ut" type="button_panel.py" name="button_panel" output="screen" />
+    </group>
+
+</launch>

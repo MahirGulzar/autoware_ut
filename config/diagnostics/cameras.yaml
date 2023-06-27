@@ -1,0 +1,17 @@
+analyzers:
+  Cameras:
+    type: diagnostic_aggregator/AnalyzerGroup
+    path: Cameras
+    analyzers:
+      camera_fl:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Front Left
+        find_and_remove_prefix: 'camera_fl: /camera_fl'
+        num_items: 1
+        timeout: 5
+      camera_fr:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Front Right
+        find_and_remove_prefix: 'camera_fr: /camera_fr'
+        num_items: 1
+        timeout: 5

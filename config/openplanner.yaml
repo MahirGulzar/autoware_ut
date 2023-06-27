@@ -1,0 +1,146 @@
+# this file contains OP specific parameters
+
+.config_params:
+  - &velocitySource 1
+  - &enableLaneChange false
+  - &pathDensity 0.5
+  - &mapSource 0
+
+op_global_planner:
+  enableDynamicMapUpdate: False
+  enableLaneChange: *enableLaneChange
+  enableReplan: False  # Automatic replanning
+  enableSmoothing: True
+  mapSource: *mapSource
+  pathDensity: *pathDensity
+  velocitySource: *velocitySource
+  goalConfirmDistance: 70  # Distance from goal to replan to the next
+  waitAtGoal: False
+
+op_behavior_selector:
+  evidence_trust_number: 25
+  enableQuickStop: False
+
+op_common_params:
+  objects_input_topic: "/detection/objects"
+  velocitySource: *velocitySource
+  additionalBrakingDistance: 1.0
+  giveUpDistance: -2.0
+  horizonDistance: 200
+  mapSource: *mapSource
+  maxAcceleration: 3.0
+  maxDeceleration: -1.0
+  maxLocalPlanDistance: 100
+  maxSteerAngle: 0.45
+  minFollowingDistance: 70.0  #should be bigger than Distance to follow
+  minDistanceToAvoid: 30      #should be smaller than minFollowingDistance and larger than maxDistanceToAvoid
+  maxDistanceToAvoid: 20.0    #should be smaller than minDistanceToAvoid
+  minPursuiteDistance: 50.0
+  minVelocity: 0.1
+  pathDensity: *pathDensity
+  smoothingDataWeight: 0.45
+  smoothingSmoothWeight: 0.4
+  speedProfileFactor: 3
+  steeringDelay: 1.2
+  # Swerving
+  enableSwerving: False
+  rollOutDensity: 1.0
+  rollOutsNumber: 0
+  #Safety box (from car)
+  horizontalSafetyDistance: 0.15
+  verticalSafetyDistance: 3.5
+  enableFollowing: True
+  enableLaneChange: *enableLaneChange
+  enableStopSignBehavior: True
+  enableTrafficLightBehavior: True
+  # Speed control parameters
+  enableCost: False
+  follow_reaction_time: 1.7          # seconds
+  follow_deceleration: -1.0          # m/s2
+  stopping_deceleration: -1.0        # m/s2
+  speed_deceleration: -1.0           # m/s2
+  stopline_deceleration_limit: -3.0  # m/s2
+  low_speed_upper_lim: 1.0
+  low_speed_lower_lim: 1.0
+  goalDiscoveryDistance: 25.0
+  use_internal_acc: False         # Internal acceleration control
+
+op_motion_predictor:
+  distanceBetweenCurbs: 1.5
+  enableCurbObstacles: False
+  enableGenrateBranches: False
+  enableParticleFilterPrediction: False
+  particles_number: 50
+  min_particles_num: 2
+  keep_percentage: 0.5
+  enableStepByStepSignal: False
+  min_prediction_time: 11.0       # Extend prediction time
+  max_distance_to_lane: 2        # Distance to lane for object to be placed on that lane
+  min_prediction_distance: 2
+  visualizationTime: 0.25
+
+  # Trajectory prediction weights. Here, the sum must be equal to 1
+  pose_weight_factor: 0.2
+  dir_weight_factor: 0.2
+  vel_weight_factor: 0.2
+  acc_weight_factor: 0.2
+  ind_weight_factor: 0.2
+
+op_trajectory_evaluator:
+  enablePrediction: False       # Enabling this will enable evaluations of ego's rollout with predicted trajectories of other obstacles
+  keepCurrentTrajectory: False
+  collision_time: 11.0    # Collision time difference below this we should be caucious.
+                          # Make it same as min_prediction_time for more understandable view in rviz.
+  # Rollout cost weights. Here, the sum must be equal to 1
+  weight_priority: 0.2
+  weight_transition: 0.2
+  weight_longitudinal: 0.2
+  weight_lateral: 0.2
+  weight_lane_change: 0.2
+  
+op_trajectory_generator:
+  enableHeadingSmoothing: False
+  samplingOutMargin: 0
+  samplingSpeedFactor: 0.0
+  samplingTipMargin: 0
+
+twist_gate:
+  use_decision_maker: false
+
+# Mission Planning
+waypoint_replanner:
+  # If set to true, the output is published to /based/lane_waypoints_array.
+  # Otherwise, it is published to /lane_waypoints_array.
+  # use_decision_maker: false
+  # Whether to replan the waypoints' velocity in the received raw lane array.
+  ### replanning_mode: true
+  # Maximum velocity for each waypoint if replanning, in km/h.
+  # velocity_max: 40.0
+  # Maximum accleration, in m/s^2.
+  accel_limit: 0.6
+  # Maximum deceleration, in m/s^2.
+  decel_limit: 0.6
+  lateral_accel_limit: 2.0
+  # Whether to resample the waypoints if replanning_mode is true.
+  resample_mode: false
+  # Minimum distance in between two consecutive waypoints, in meter.
+  resample_interval: 1.0
+  # Whether to replan the curvy lane segments if replanning mode is true.
+  # replan_curve_mode: true
+  # Minimum radius, in meter
+  radius_min: 6.0
+  # Minimum velocity for waypoints in curvy lane segments, in km/h.
+  # [velocity_max, velocity_min] is corresponding to [radius_thresh, radius_min].
+  velocity_min: 4.0
+  # Largest road radius to be considered as curvy, in meter.
+  radius_thresh: 20.0
+  # Whether to set all waypoints to velocity_max if replan_curve_mode is true.
+  overwrite_vmax_mode: true
+  # Whether to set speed of the beginnig waypoint of lane to velocity_min and
+  # its end waypoint to zero.
+  ### replan_endpoint_mode: false
+  # The speed of waypoints in the range of [num_wpts-1-end_point_offset, num_wpts-1]
+  # are all set to zero.
+  end_point_offset: 1
+  # The offset from the end_point_offset from which to start deceleration.
+  braking_distance: 5

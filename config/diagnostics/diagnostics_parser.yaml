@@ -1,0 +1,61 @@
+"novatel/oem7/driver_diag: Status":
+  nominal_sound: "gps_ok.wav"
+  tests:
+    RTK diff age:
+      below: 10.0
+      type: float
+      message: "Diff age high"
+      sound: "rtk_old.wav" #todo
+    Solution age:
+      below: 5.0
+      type: float
+      message: "Diff age high"
+      sound: "gps_signal_lost.wav"
+    Solution status:
+      exactly: 0 # See https://github.com/novatel/novatel_oem7_driver/blob/master/src/novatel_oem7_msgs/msg/SolutionStatus.msg
+      type: int
+      message: "Solution not computed"
+      sound: "gps_signal_lost.wav"
+    Position or velocity type:
+      in: [56, 55, 50, 40, 34] # See https://github.com/novatel/novatel_oem7_driver/blob/master/src/novatel_oem7_msgs/msg/PositionOrVelocityType.msg
+      type: int
+      message: "RTK not computed"
+      sound: "gps_no_rtk.wav"
+    Satellites tracked:
+      above: 5
+      type: int
+      message: "Satellites tracked low"
+      sound: "low_sat_count.wav"
+    Satellites used:
+      above: 5
+      type: int
+      message: "Satellites used low"
+      sound: "low_sat_count.wav"
+    Lon stdev (m):
+      below: 0.5
+      type: float
+      message: "Longitude accuracy low"
+      sound: "gps_low_accuracy.wav" #todo
+    Lat stdev (m):
+      below: 0.5
+      type: float
+      message: "Latitude accuracy low"
+      sound: "gps_low_accuracy.wav" #todo
+"ib_tls: Status":
+  nominal_sound: "trafficlight_ok.wav"
+  tests:
+    Received Data:
+      exactly: True
+      type: bool
+      message: "API Down"
+      sound: "trafficlight_query_failed.wav"
+    Unknown TL state:
+      exactly: None
+      type: string
+      message: "Traffic light state unknown"
+      sound: "trafficlight_data_error.wav"
+    Missing traffic light IDs:
+      exactly: []
+      type: string
+      message: "Missing traffic light IDs"
+      sound: "trafficlight_data_error.wav"

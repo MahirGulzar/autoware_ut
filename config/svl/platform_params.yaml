@@ -1,0 +1,46 @@
+# This file contains parameters that are platform-specific
+
+.config_params:
+  - &lidar_frame lidar
+
+# Make use of SVL /clock simuated time
+use_sim_time: true
+
+# TODO: Resolve code duplication, this information is already in the base_link -> velodyne TF
+tf_x: 0.3679201
+tf_y: 0.0
+tf_z: 1.975314
+tf_yaw: 0.0
+tf_pitch: 0.0
+tf_roll: 0.0
+
+# The wheelbase of the vehicle (meters)
+vehicle_info:
+  wheel_base: 2.789
+
+ray_ground_filter:
+  sensor_height: 1.975314
+  min_point_distance: 3
+  clipping_height: 2
+
+naive_motion_predict:
+  sensor_height: 1.975314
+
+velocity_set:
+  detection_height_top: 0.1
+  detection_height_bottom: -2.0
+  detection_range: 1.5
+
+sim_camera_info_publisher_left:
+  cam_id: camera_fl
+  fovx: 34
+  fovy: 28
+  resx: 1444
+  resy: 1080
+
+sim_camera_info_publisher_right:
+  cam_id: camera_fr
+  fovx: 43
+  fovy: 37
+  resx: 1444
+  resy: 1080

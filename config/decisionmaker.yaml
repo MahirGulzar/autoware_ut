@@ -1,0 +1,148 @@
+# dm_platform specific parameters.
+
+decision_maker:
+  param_num_of_steer_behind: 20
+  # Use sim_mode to disable checking for lidar points
+  ### sim_mode: true
+  auto_engage: false
+  use_ll2: true
+  use_fms: false
+  ignore_map: false
+  # number of wp over the stopline to reset (forget) it
+  stopline_reset_count: 5
+  # time to stop at the stopline
+  stopline_wait_duration: 1.0
+  # maximum distance radius from stopline's center point to detect for objects
+  stopline_detect_dist: 10.0
+  stopline_min_safety_duration: 4.0
+  # what velocity should be considered as 0
+  stopped_vel: 0.1
+  # defaults from the Decision Maker code
+  auto_mission_change: false
+  auto_mission_reload: false
+  # weather to interpolate wp (true) or assign stoplilne to closest existing wp
+  insert_stop_line_wp: true
+  lookahead_distance: 30.0
+  mission_change_threshold_dist: 1.0
+  mission_change_threshold_angle: 15
+  goal_threshold_dist: 3.0
+  goal_threshold_vel: 0.1
+
+# Mission Planning
+waypoint_replanner:
+  # If set to true, the output is published to /based/lane_waypoints_array.
+  # Otherwise, it is published to /lane_waypoints_array.
+  use_decision_maker: true
+  # Whether to replan the waypoints' velocity in the received raw lane array.
+  ### replanning_mode: true
+  # Maximum velocity for each waypoint if replanning, in km/h.
+  # velocity_max: 40.0
+  # Maximum accleration, in m/s^2.
+  accel_limit: 0.6
+  # Maximum deceleration, in m/s^2.
+  decel_limit: 0.6
+  lateral_accel_limit: 2.0
+  # Whether to resample the waypoints if replanning_mode is true.
+  resample_mode: false
+  # Minimum distance in between two consecutive waypoints, in meter.
+  resample_interval: 1.0
+  # Whether to replan the curvy lane segments if replanning mode is true.
+  # replan_curve_mode: true
+  # Minimum radius, in meter
+  radius_min: 6.0
+  # Minimum velocity for waypoints in curvy lane segments, in km/h.
+  # [velocity_max, velocity_min] is corresponding to [radius_thresh, radius_min].
+  velocity_min: 4.0
+  # Largest road radius to be considered as curvy, in meter.
+  radius_thresh: 20.0
+  # Whether to set all waypoints to velocity_max if replan_curve_mode is true.
+  overwrite_vmax_mode: true
+  # Whether to set speed of the beginnig waypoint of lane to velocity_min and
+  # its end waypoint to zero.
+  ### replan_endpoint_mode: false
+  # The speed of waypoints in the range of [num_wpts-1-end_point_offset, num_wpts-1]
+  # are all set to zero.
+  end_point_offset: 1
+  # The offset from the end_point_offset from which to start deceleration.
+  braking_distance: 5
+
+velocity_set:
+  update_rate: 10.0
+  # point cloud topic to be subscribed
+  points_topic: detection/lidar/points_no_ground
+  # ROI of point cloud in z-axis, in meter
+  detection_height_top: 0.1
+  detection_height_bottom: -2.0
+  # points ignored in x-y 2d radius nearby ego-vehicle, in meter
+  remove_points_upto: 2.3
+  # upper distance limit to waypoints to be considered as a obstacle candidate point
+  detection_range: 1.5
+  # minimum number of candidate points to be considered as a obstacle
+  points_threshold: 20
+  use_crosswalk_detection: false
+  enable_multiple_crosswalk_detection: false
+  # stop distance from a obstacle
+  stop_distance_obstacle: 7.0
+  # stop distance from a stop line
+  stop_distance_stopline: 5.0
+  # deceleration when approaching obstacle
+  deceleration_obstacle: 1.2
+  # deceleration when approaching stopline
+  deceleration_stopline: 0.6
+  # used in avoid sudden deceleration, in km/h
+  velocity_change_limit: 7.0
+  # used in avoid sudden acceleration to prevent car from  being still, in m/s
+  velocity_offset: 4.0
+  # minimum speed during deceleration when approaching obstacles, in m/s
+  decelerate_vel_min: 1.3
+  # final waypoints size ahead of ego-vehicle to be published
+  # it should be less or equal to safety_waypoint_size from astar_avoid node
+  temporal_waypoints_size: 100
+  # min velocity that is sent when car starts to accelerate
+  min_accel_velocity: 1.5
+  # rate at which speed is increased, it is added to current_vel and max is taken from (min_accel_velocity, curr_vel+accel_vel)
+  accel_velocity: 0.8
+  acceleration: 0.8  
+  deceleration_range: 0
+
+# Motion Planning
+astar_avoid:
+  update_rate: 10.0
+  enable_avoidance: false
+  avoid_waypoints_velocity: 7.0
+  # maximum number of waypoints to be published
+  safety_waypoint_size: 100
+
+lane_rule:
+  # For generating stop and start speed profile around stop line
+  acceleration: 1.5
+  # The offset of waypoints after stop line for acceleration
+  number_of_zeros_ahead: 5
+  # The offset of waypoints before stop line to start deceleration
+  number_of_zeros_behind: 5
+  stopline_search_radius: 8.0
+  # Number of iterations to smooth waypoint speed profile.
+  # Note: not the number of waypoints used for speed smoothing
+  number_of_smoothing_count: 3
+
+lane_stop:
+  manual_detection: false
+
+lane_select:
+  # Threshold in between the current ego-vehicle's position to the previous closest waypoint
+  # If the distance is larger than this threshold, assume something goes wrong.
+  distance_threshold: 5.0
+  # The following two parameters are being used to find a waypoint on the
+  # neighboring lane as a target waypoint for lane change.
+  # Minimum time to do the lane change, in second.
+  lane_change_target_ratio: 5.0
+  # Minimum distance to do the changed lane, in meter.
+  lane_change_target_minimum: 10.0
+  # The length of the curve connecting the ego-vehicle to the target waypoint on
+  # the neighbouring lane.
+  vector_length_hermite_curve: 10.0
+  # Minimum distance to keep the ego_vehicle on neighbouring lane.
+  lane_change_interval: 10.0
+
+twist_gate:
+  use_decision_maker: true

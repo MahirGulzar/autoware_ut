@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="platform" default="lexus" doc="{lexus, sim_mode, svl_sim}"/>
+
+
+    <!-- LGSVL to GPSINS converter -->
+    <node if="$(eval arg('platform') == 'svl_sim')" pkg="gpsins_localizer" type="lgsvl_converter.py" name="lgsvl_converter" />
+
+    <!-- gpsins_localizer -->
+    <node pkg="gpsins_localizer" type="gpsins_localizer_node" name="gpsins_localizer" output="screen">
+        <param name="broadcast_tfs" type="bool" value="true" />
+    </node>
+
+</launch>

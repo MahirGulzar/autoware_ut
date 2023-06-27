@@ -1,0 +1,35 @@
+{
+    "obstacles": [
+        {
+            "file": "0.csv",
+            "replan": true,
+            "initial_delay": 10
+        },
+        {
+            "file": "1.csv",
+            "replan": true,
+            "initial_delay": 8
+        },
+        {
+            "file": "2.csv",
+            "replan": true,
+            "initial_delay": 6
+        },
+        {
+            "file": "3.csv",
+            "replan": true,
+            "initial_delay": 6
+        }
+    ],
+    "map_offset_configurations": {
+        "origin_xy": [
+            9429.2,
+            9815.9
+        ],
+        "offset_xy": [
+            1506.3,
+            1470.48
+        ],
+        "yaw_rotation": 1.8326
+    }
+}

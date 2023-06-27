@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="map_name"        default="tartu" />
+    <arg name="lanelet2_map"    default="tartu.osm" />
+
+
+    <!-- Load Lanelet2 map -->
+    <include file="$(find map_file)/launch/lanelet2_map_loader.launch">
+        <arg name="file_name" value="$(find autoware_ut)/maps/$(arg map_name)/lanelet2/$(arg lanelet2_map)"/>
+    </include>
+
+</launch>

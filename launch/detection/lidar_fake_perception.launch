@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="fake_points_topic"  default="/detection/lidar/points_no_ground" />
+    <arg name="object_velocity"    default="1.0" />
+
+
+    <include file="$(find lidar_fake_perception)/launch/lidar_fake_perception.launch" >
+        <arg name="initial_pose_topic"      value="/move_base_simple/goal"/>
+        <arg name="real_objects_topic"      value="/detected_objects"/>
+        <arg name="real_points_topic"       value="/points_raw"/>
+        <arg name="fake_twist_topic"        value="/fake_twist"/>
+        <arg name="fake_objects_topic"      value="/fake_objects"/>
+        <arg name="fake_points_topic"       value="$(arg fake_points_topic)" />
+        <arg name="publish_objects"         value="true"/>
+        <arg name="publish_points"          value="true"/>
+        <arg name="publish_rate"            value="10.0"/>
+        <arg name="object_length"           value="1.2"/>
+        <arg name="object_width"            value="0.4"/>
+        <arg name="object_height"           value="1.8"/>
+        <arg name="object_z_offset"         value="0.0"/>
+        <arg name="use_fake_twist"          value="false"/>
+        <arg name="object_velocity"         value="$(arg object_velocity)" />
+        <arg name="object_angular_velocity" value="0.0"/>
+        <arg name="object_intensity"        value="100.0"/>
+        <arg name="object_lifetime"         value="-1"/>
+        <arg name="object_points_space"     value="0.2"/>
+        <arg name="object_label"            value="Stable"/>
+        <arg name="object_frame"            value="map"/>
+    </include>
+
+</launch>

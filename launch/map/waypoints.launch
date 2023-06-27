@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="map_name"        default="tartu" />
+    <arg name="waypoints_file"  default="delta_pocket_exit.csv" />
+
+
+    <!-- Waypoint Loader -->
+    <node pkg="waypoint_maker" type="waypoint_loader" name="waypoint_loader" output="screen">
+        <param name="multi_lane_csv" value="$(find autoware_ut)/maps/$(arg map_name)/paths/$(arg waypoints_file)" />
+    </node>
+
+</launch>
+
+
+
