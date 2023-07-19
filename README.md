@@ -93,15 +93,15 @@ Similarly to `platform` there are three more important arguments where you can c
 ```
 
 - `planner` - select which planning stack is used for planning. Currently, there are two options:
-  - `openplanner` - OpenPlanner stack ([OP global planner](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/core_planning/-/tree/ut/master/op_global_planner), [OP local planner](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/core_planning/-/tree/ut/master/op_local_planner), [op_planner](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/common/-/tree/ut/master/op_planner)). This has been mainly used in ADL.
-  - `decisionmaker` - [Decision Maker](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/core_planning/-/tree/ut/master/decision_maker) stack
+  - `openplanner` - OpenPlanner stack ([OP global planner](https://github.com/MahirGulzar/core_planning/tree/feature/prediction/op_global_planner), [OP local planner](https://github.com/MahirGulzar/core_planning/tree/feature/prediction/op_local_planner), [op_planner](https://github.com/MahirGulzar/common/tree/feature/prediction/op_planner)). This has been mainly used in ADL.
+  - `decisionmaker` - [Decision Maker](https://github.com/MahirGulzar/core_planning/tree/feature/prediction/decision_maker) stack
 - `controller` - select which controller will be responsible for the path following. In general, when the destination is set for the car (in simulation or real world) the planner will do the global routing and find the path. The controller will be used to calculate the driving commands (mainly steering) to follow that path. Three options for the controller algorithms are:
-  - `purepursuit` - [Pure Pursuit](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/core_planning/-/tree/ut/master/pure_pursuit)
-  - `stanley` - [Stanley](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/core_planning/-/tree/ut/master/stanley_controller)
-  - `mpc` - [MPC follower](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/core_planning/-/tree/ut/master/mpc_follower)
+  - `purepursuit` - [Pure Pursuit](https://github.com/MahirGulzar/core_planning/tree/feature/prediction/pure_pursuit)
+  - `stanley` - [Stanley](https://github.com/MahirGulzar/core_planning/tree/feature/prediction/stanley_controller)
+  - `mpc` - [MPC follower](https://github.com/MahirGulzar/core_planning/tree/feature/prediction/mpc_follower)
 - `localizer` - select which localizer is used
-  - `gpsins` - [gpsins_localizer](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/core_perception/-/tree/ut/master/gpsins_localizer) - works with the real car in outside (open sky visibility) conditions. Will use different GNSS satellite constellations to determine the car's position. This position will be used to locate the car on the map.
-  - `ndt` - will launch [lidar_localizer](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/core_perception/-/tree/ut/master/lidar_localizer) in ndt_matching mode. This localization method assumes the presence of a pointcloud map and the localization is done by matching the current lidar scan (can be in real car or from simulation environment) with the pointcloud map. This match determines the location of the lidar, and by using the transform tree, it can also be transferred to the `base_link` frame.
+  - `gpsins` - [gpsins_localizer](https://github.com/astuff/autoware.ai-core_perception/tree/as/master/gpsins_localizer) - works with the real car in outside (open sky visibility) conditions. Will use different GNSS satellite constellations to determine the car's position. This position will be used to locate the car on the map.
+  - `ndt` - will launch [lidar_localizer](https://github.com/astuff/autoware.ai-core_perception/tree/as/master/lidar_localizer) in ndt_matching mode. This localization method assumes the presence of a pointcloud map and the localization is done by matching the current lidar scan (can be in real car or from simulation environment) with the pointcloud map. This match determines the location of the lidar, and by using the transform tree, it can also be transferred to the `base_link` frame.
 
 ### Run Openplanner in simulation mode
 
