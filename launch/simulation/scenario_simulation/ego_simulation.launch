@@ -63,6 +63,11 @@
         </node>
     </group>
 
+    <!-- Overide default values of following parameters in config/openplanner.yaml -->
+    <rosparam ns="op_motion_predictor"       param="enableVectorSpeeds">true</rosparam>
+    <rosparam ns="op_trajectory_evaluator"   param="enablePrediction">true</rosparam>
+
+
     <group if="$(arg rviz)">
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find autoware_ut)/rviz/op_sim.rviz" respawn="true" />
     </group>

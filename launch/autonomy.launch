@@ -118,4 +118,10 @@
         <arg name="use_tl_detection"        value="$(arg use_tl_detection)" />
     </include>
 
+    <group if="$(eval arg('tracker')=='cvkf')">
+        <!-- Overide default value of enableVectorSpeeds parameter in config/openplanner.yaml
+             This will enable sign estimation and orientation correction for detected obstacles -->
+        <rosparam ns="op_motion_predictor"       param="enableVectorSpeeds">true</rosparam>
+    </group>
+
 </launch>

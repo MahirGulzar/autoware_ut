@@ -116,3 +116,12 @@ roslaunch autoware_ut startup.launch planner:=openplanner platform:=sim_mode
 ```
 roslaunch autoware_ut startup.launch planner:=openplanner platform:=sim_mode use_tl_detection:=false map_name:=tartu
 ```
+
+
+### Run Openplanner yeilding scenario in simulation mode
+
+* To run Openplanner's yielding scenario in simulation mode run following command. This launches roundabout yeilding [scenario-6](https://github.com/MahirGulzar/autoware_ut/tree/master/config/scenario_configs/delta_roundabout/scenario_6).
+
+```
+roslaunch autoware_ut ego_simulation.launch
+```

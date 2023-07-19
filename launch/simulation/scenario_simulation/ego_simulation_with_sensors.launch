@@ -91,9 +91,15 @@
         <arg name="tracker"             value="$(arg tracker)"/>
     </include>
 
+    <group if="$(eval arg('tracker')=='cvkf')">
+        <!-- Overide default values of following parameters in config/openplanner.yaml -->
+        <rosparam ns="op_motion_predictor"       param="enableVectorSpeeds">true</rosparam>
+        <rosparam ns="op_trajectory_evaluator"   param="enablePrediction">true</rosparam>
+    </group>
+
     <group if="$(arg run_rviz)">
-        <node unless="$(arg fullscreen)" type="rviz" name="rviz" pkg="rviz" args="-d $(find autoware_ut)/rviz/openplanner.rviz" />
-        <node if="$(arg fullscreen)" type="rviz" name="rviz" pkg="rviz" args="--fullscreen -d $(find autoware_ut)/rviz/openplanner.rviz" />
+        <node unless="$(arg fullscreen)" type="rviz" name="rviz" pkg="rviz" args="-d $(find autoware_ut)/rviz/openplanner_prediction.rviz" />
+        <node if="$(arg fullscreen)" type="rviz" name="rviz" pkg="rviz" args="--fullscreen -d $(find autoware_ut)/rviz/openplanner_prediction_fullscreen.rviz" />
     </group>
 
 </launch>

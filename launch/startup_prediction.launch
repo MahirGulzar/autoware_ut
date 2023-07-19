@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- General setup -->
+    <arg name="platform"                default="lexus"      doc="{lexus, sim_mode, svl_sim}"/>
+    <arg name="controller"              default="mpc"           doc="{purepursuit, stanley, mpc}" />
+    <arg name="localizer"               default="gpsins"        doc="{gpsins, ndt}" />
+    <!-- Maps and planning -->
+    <arg name="maxVelocity"             default="40.0" />       <!-- km/h -->
+    <arg name="enableRvizInput"         default="true" />
+    <arg name="waypoints_file"          default="delta_pocket_exit.csv" />
+    <arg name="use_pointcloud_map"      default="false" />
+    <arg name="use_waypoints"           default="false" />
+    <!-- Platform and sensors -->
+    <arg name="use_diagnostics"         default="true" />
+    <arg name="use_camera_fr"           default="true" />
+    <arg name="use_camera_fl"           default="true" />
+    <arg name="rectify"                 default="false" />
+    <!-- Detection -->
+    <arg name="use_fake_obstacles"      default="false" />
+    <arg name="use_obstacle_detection"  default="true" />
+    <arg name="use_tl_detection"        default="true" />       <!-- traffic light detection -->
+    <!-- Nodes -->
+    <arg name="use_engage_button"       default="true" />
+    <arg name="use_button_panel"        default="true" />
+    <arg name="use_indicators"          default="true" />
+    <arg name="use_webapp"              default="false" />
+    <arg name="use_modern_mobility_api"  default="false" />
+    <arg name="use_modern_mobility_live" default="false" />
+    <!-- rviz -->
+    <arg name="fullscreen"              default="false" />
+    <arg name="run_rviz"                default="true" />
+
+    <include file="$(find autoware_ut)/launch/startup.launch">
+        <arg name="platform"                 value="$(arg platform)" />
+        <arg name="controller"               value="$(arg controller)" />
+        <arg name="localizer"                value="$(arg localizer)" />
+        <arg name="maxVelocity"              value="$(arg maxVelocity)" />
+        <arg name="enableRvizInput"          value="$(arg enableRvizInput)" />
+        <arg name="waypoints_file"           value="$(arg waypoints_file)" />
+        <arg name="use_pointcloud_map"       value="$(arg use_pointcloud_map)" />
+        <arg name="use_waypoints"            value="$(arg use_waypoints)" />
+        <arg name="use_diagnostics"          value="$(arg use_diagnostics)" />
+        <arg name="use_camera_fr"            value="$(arg use_camera_fr)" />
+        <arg name="use_camera_fl"            value="$(arg use_camera_fl)" />
+        <arg name="rectify"                  value="$(arg rectify)" />
+        <arg name="use_fake_obstacles"       value="$(arg use_fake_obstacles)" />
+        <arg name="use_obstacle_detection"   value="$(arg use_obstacle_detection)" />
+        <arg name="use_tl_detection"         value="$(arg use_tl_detection)" />
+        <arg name="use_engage_button"        value="$(arg use_engage_button)" />
+        <arg name="use_button_panel"         value="$(arg use_button_panel)" />
+        <arg name="use_indicators"           value="$(arg use_indicators)" />
+        <arg name="use_webapp"               value="$(arg use_webapp)" />
+        <arg name="use_modern_mobility_api"  value="$(arg use_modern_mobility_api)" />
+        <arg name="use_modern_mobility_live" value="$(arg use_modern_mobility_live)" />
+        
+        <!-- Default configurations for prediction & yielding functionality -->
+        <arg name="use_lidar_center"         value="true" />
+        <arg name="use_lidar_front"          value="false" />
+        <arg name="use_lidar_front_image"    value="false" />
+        <arg name="use_radar"                value="false" />
+        <arg name="enable_raw_radar"         value="false" />
+        <arg name="detector"                 value="pointpillars" />
+        <arg name="tracker"                  value="cvkf" />
+        <arg name="map_name"                 value="tartu_yielding" />
+        <arg name="planner"                  value="openplanner" />
+        <arg name="run_rviz"                 value="false" />
+    </include>
+
+    <!-- Overide default values of enablePrediction parameter in config/openplanner.yaml
+         This will enable yielding evaluation in ego's rollout -->
+    <rosparam ns="op_trajectory_evaluator"   param="enablePrediction">true</rosparam>
+
+    <!-- Rviz -->
+    <group if="$(arg run_rviz)">
+        <node unless="$(arg fullscreen)" type="rviz" name="rviz" pkg="rviz" args="-d $(find autoware_ut)/rviz/openplanner_prediction.rviz" />
+        <node if="$(arg fullscreen)" type="rviz" name="rviz" pkg="rviz" args="--fullscreen -d $(find autoware_ut)/rviz/openplanner_prediction_fullscreen.rviz" />
+    </group>
+
+</launch>

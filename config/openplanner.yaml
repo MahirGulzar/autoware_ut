@@ -78,6 +78,9 @@ op_motion_predictor:
   max_distance_to_lane: 2        # Distance to lane for object to be placed on that lane
   min_prediction_distance: 2
   visualizationTime: 0.25
+  enableVectorSpeeds: False    # Only enable this if tracked objects have speed vectors instead of scalars.
+                               # If enabled, OpenPlanner will applying orientation correction and will 
+                               # estimate speed signs on the basis of speed vectors.
 
   # Trajectory prediction weights. Here, the sum must be equal to 1
   pose_weight_factor: 0.2
@@ -87,7 +90,7 @@ op_motion_predictor:
   ind_weight_factor: 0.2
 
 op_trajectory_evaluator:
-  enablePrediction: False       # Enabling this will enable evaluations of ego's rollout with predicted trajectories of other obstacles
+  enablePrediction: False       # Enabling this will enable yielding evaluations of ego's rollout with predicted trajectories of other obstacles
   keepCurrentTrajectory: False
   collision_time: 11.0    # Collision time difference below this we should be caucious.
                           # Make it same as min_prediction_time for more understandable view in rviz.
