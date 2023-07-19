@@ -1,6 +1,8 @@
 # UT ADL Autoware launch files
 
 
+<b> NOTE: Following packages have been tested on `Ubuntu-18 with ROS melodic`. </b>
+
 ## Intro and Installation
 
 ### Introduction
