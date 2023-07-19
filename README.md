@@ -5,7 +5,7 @@
 
 ### Introduction
 
-`autoware_ut` package contains all the necessary launch and configuration files to run **autoware.ai** (needs to be [installed separately](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/local/autoware_misc/-/tree/ut/master/autoware_install_scripts]) on the UT ADL Lexus car or in the simulation mode with our custom configuration. It consists of the following folders:
+`autoware_ut` package contains all the necessary launch and configuration files to run **autoware.ai** on the UT ADL Lexus car or in the simulation mode with our custom configuration. It consists of the following folders:
 
 - `/config` - includes parameters for nodes organized in separate files that will be loaded at the end of corresponding launch files, for example `control.launch` will load `control.yaml` file.
 - `/launch` - launch files to run different platforms (`sim_mode`, `lexus`), planners (`openplanner`, `decisionmaker`) or just sensors visualization with the car.
@@ -16,7 +16,12 @@
 
 ### Installation
 
-To set up the `autoware_ut` package [autoware install scripts](https://gitlab.cs.ut.ee/autonomous-driving-lab/autoware.ai/local/autoware_misc/-/tree/ut/master/autoware_install_scripts) can be used. Script `07_ut_pkgs_install.bash` is specifically dedicated to setting up the `autoware_ut` package and will install all the content described in the introduction.
+We have created some installation scripts for you to build this version of autoware_ut along with our custom forked repostories of autoware.ai. Kindly follow these steps to build autoware_ut.
+
+- autoware_ut requires CUDA-10, you can use the helper script [`01_cuda_10_install.bash`](https://github.com/MahirGulzar/autoware_ut/tree/master/scripts/01_cuda_10_install.bash) for installing the required specific version of CUDA
+- If tensorflow is not installed then use the helper script [`02_tensorflow_install.bash`](https://github.com/MahirGulzar/autoware_ut/tree/master/scripts/02_tensorflow_install.bash) for installing it.
+- Next, the helper script [`03_autoware_install.bash`](https://github.com/MahirGulzar/autoware_ut/tree/master/scripts/03_autoware_install.bash) clones and builds autoware.ai with required packages from both original stack and ours.
+- Lastly, the helper script [`04_ut_pkgs_install.bash`](https://github.com/MahirGulzar/autoware_ut/tree/master/scripts/04_ut_pkgs_install.bash) clones and builds autoware_ut required repositories. During build step, this script chains the autoware_ut's workspace with autoware.ai that is build in the previous step.
  
 ## Launch Files
 

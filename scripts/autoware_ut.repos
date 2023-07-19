@@ -1,0 +1,13 @@
+repositories:
+  autoware_ut:
+    type: git
+    url: git@gitlab.cs.ut.ee:autonomous-driving-lab/autoware.ai/local/autoware_ut.git
+    version: ut/master
+  vehicle_platform:
+    type: git
+    url: git@github.com:UT-ADL/vehicle_platform.git
+    version: ut/master
+  velodyne:
+    type: git
+    url: https://github.com/ros-drivers/velodyne.git
+    version: 1.6.1

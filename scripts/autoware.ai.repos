@@ -1,0 +1,31 @@
+repositories:
+  # Self managed repos :
+  common:
+    type: git
+    url: git@github.com:MahirGulzar/common.git
+    version: ut/master
+  core_perception:
+    type: git
+    url: git@github.com:astuff/autoware.ai-core_perception.git
+    version: ut/master
+  core_planning:
+    type: git
+    url: git@github.com:MahirGulzar/core_planning.git
+    version: ut/master
+  messages:
+    type: git
+    url: git@github.com:MahirGulzar/messages.git
+    version: ut/master
+  # Repos managed by third party :
+  simulation:
+    type: git
+    url: https://gitlab.com/astuff/autoware.ai/simulation.git
+    version: oap8
+  utilities:
+    type: git
+    url: https://gitlab.com/astuff/autoware.ai/utilities.git
+    version: oap8
+  visualization:
+    type: git
+    url: https://gitlab.com/astuff/autoware.ai/visualization.git
+    version: oap8
